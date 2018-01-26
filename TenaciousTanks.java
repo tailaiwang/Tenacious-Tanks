@@ -16,7 +16,7 @@ public class TenaciousTanks extends JFrame implements ActionListener,KeyListener
 
     public TenaciousTanks() {
     	super("Tenacious Tanks");
-    	setSize(1200,700);
+    	setSize(1500,700);
     	myTimer = new Timer (10,this);
     	myTimer.start();
     	game = new GamePanel();
@@ -51,27 +51,27 @@ public class TenaciousTanks extends JFrame implements ActionListener,KeyListener
 }//end CLASS
 
 class GamePanel extends JPanel{
-	Image background,green,green1,red,red1;
+	Image green,green1,red,red1;
+	ImageIcon gameBack;
 	int greenX,greenIndex,redX,redIndex = 0;
 	private boolean[] keys;
 	private Image[]greens,reds;
 	public GamePanel(){
 		keys = new boolean [KeyEvent.KEY_LAST+1];
 		/////////////////////////////////////////////////
-    	background = new ImageIcon("background.jpg").getImage();
-    	background = background.getScaledInstance(1200,700,Image.SCALE_SMOOTH);
+    	gameBack = new ImageIcon("gameBack.jpg");
     	/////////////////////////////////////////////////
-    	green = new ImageIcon("GreenTank.png").getImage();
+    	green = new ImageIcon("GreenTankRight.png").getImage();
     	green = green.getScaledInstance(175,175,Image.SCALE_SMOOTH);
-    	green1 = new ImageIcon("GreenTank1.png").getImage();
+    	green1 = new ImageIcon("GreenTankLeft.png").getImage();
     	green1 = green1.getScaledInstance(175,174,Image.SCALE_SMOOTH);
     	greens = new Image[2];
     	greens[0] = green;
     	greens[1] = green1;
     	////////////////////////////////////////////////
-    	red = new ImageIcon("RedTank.png").getImage();
+    	red = new ImageIcon("RedTankRight.png").getImage();
     	red = red.getScaledInstance(175,175,Image.SCALE_SMOOTH);
-    	red1 = new ImageIcon("RedTank1.png").getImage();
+    	red1 = new ImageIcon("RedTankLeft.png").getImage();
     	red1 = red1.getScaledInstance(175,175,Image.SCALE_SMOOTH);
     	reds = new Image[2];
     	reds[0] = red;
@@ -101,7 +101,8 @@ class GamePanel extends JPanel{
     }
     
 	public void paintComponent(Graphics g){
-		g.drawImage(background,0,0,this);
+		//g.drawImage(gameBack,0,0,this);
+		gameBack.paintIcon(this, g, -200,-400);
 		g.drawImage(greens[greenIndex],greenX,200,this);
 		g.drawImage(reds[redIndex],redX,400,this);
 	}
