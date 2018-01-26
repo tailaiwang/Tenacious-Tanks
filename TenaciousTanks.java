@@ -59,19 +59,19 @@ class GamePanel extends JPanel{
 	public GamePanel(){
 		keys = new boolean [KeyEvent.KEY_LAST+1];
 		/////////////////////////////////////////////////
-    	gameBack = new ImageIcon("gameBack.jpg");
+    	gameBack = new ImageIcon("Images/gameBack.jpg");
     	/////////////////////////////////////////////////
-    	green = new ImageIcon("GreenTankRight.png").getImage();
+    	green = new ImageIcon("Images/GreenTankRight.png").getImage();
     	green = green.getScaledInstance(175,175,Image.SCALE_SMOOTH);
-    	green1 = new ImageIcon("GreenTankLeft.png").getImage();
+    	green1 = new ImageIcon("Images/GreenTankLeft.png").getImage();
     	green1 = green1.getScaledInstance(175,174,Image.SCALE_SMOOTH);
     	greens = new Image[2];
     	greens[0] = green;
     	greens[1] = green1;
     	////////////////////////////////////////////////
-    	red = new ImageIcon("RedTankRight.png").getImage();
+    	red = new ImageIcon("Images/RedTankRight.png").getImage();
     	red = red.getScaledInstance(175,175,Image.SCALE_SMOOTH);
-    	red1 = new ImageIcon("RedTankLeft.png").getImage();
+    	red1 = new ImageIcon("Images/RedTankLeft.png").getImage();
     	red1 = red1.getScaledInstance(175,175,Image.SCALE_SMOOTH);
     	reds = new Image[2];
     	reds[0] = red;

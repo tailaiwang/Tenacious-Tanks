@@ -32,7 +32,7 @@ public class MakeMap extends JFrame {
 
 class GamePanel extends JPanel implements ActionListener{
 	
-	ImageIcon gameBack = new ImageIcon("gameBack.jpg");
+	ImageIcon gameBack = new ImageIcon("Images/gameBack.jpg");
 	
 	int xPoints[] = new int[522];
 	int yPoints[] = new int[522];
