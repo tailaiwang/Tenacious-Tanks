@@ -1,6 +1,6 @@
-# Tenacious-Tanks
+# ICS4U Simple Game Project: Tenacious-Tanks
 ###### By Cameron Beneteau and Tailai Wang
-###### ICS 4U Simple Game Project (January 22nd - ONGOING)
+
 A 2 Player Tank game made on Java. 
 ## Edit Notes Below
 January 22nd, 2018: Project begins  
