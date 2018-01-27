@@ -33,17 +33,17 @@ public class MakeMap extends JFrame {
 class GamePanel extends JPanel implements ActionListener{
 	
 	ImageIcon gameBack = new ImageIcon("Images/gameBack.jpg");
+	Polygon groundPoly = new Polygon();
+	Polygon groundPoly2 = new Polygon();
+	Polygon groundPoly3 = new Polygon();
+	Polygon groundPoly4 = new Polygon();
+	Polygon groundPoly5 = new Polygon();
 	
 	int xPoints[] = new int[522];
 	int yPoints[] = new int[522];
-	int y2Points[] = new int[522];
-	int y3Points[] = new int[522];
-	int y4Points[] = new int[522];
-	int y5Points[] = new int[522];
-	int nPoints = 522;
 
 	public GamePanel() {
-		new Timer(1000,this).start();
+		//new Timer(1000,this).start();
 		makeLand();
 	}
 		
@@ -55,7 +55,7 @@ class GamePanel extends JPanel implements ActionListener{
 	public void makeLand(){
 		while(true){
 			boolean valid = true;
-			int y = 500;
+			int y = randInt(500, 600);
 			int dy = 0;
 			for (int x = 0; x < 520; x++){
 				if(x % 20 == 0){
@@ -64,10 +64,6 @@ class GamePanel extends JPanel implements ActionListener{
 				xPoints[x] = x * 15;
 				y += randInt(-10 + dy, 10 + dy);
 				yPoints[x] = y;
-				y2Points[x] = y + 15;
-				y3Points[x] = y + 45;
-				y4Points[x] = y + 85;
-				y5Points[x] = y + 120;
 				if (y < 150 || y > 650){
 					valid = false;
 				}
@@ -76,18 +72,24 @@ class GamePanel extends JPanel implements ActionListener{
 				break;
 			}
 		}
-		xPoints[520] = 1500;
-		yPoints[520] = 700;
-		y2Points[520] = 700;
-		y3Points[520] = 700;
-		y4Points[520] = 700;
-		y5Points[520] = 700;
-		xPoints[521] = 0;
-		yPoints[521] = 700;
-		y2Points[521] = 700;
-		y3Points[521] = 700;
-		y4Points[521] = 700;
-		y5Points[521] = 700;
+		
+		for (int i = 0; i < 520; i++){
+			groundPoly.addPoint(xPoints[i], yPoints[i]);
+			groundPoly2.addPoint(xPoints[i], yPoints[i] + 15);
+			groundPoly3.addPoint(xPoints[i], yPoints[i] + 45);
+			groundPoly4.addPoint(xPoints[i], yPoints[i] + 65);
+			groundPoly5.addPoint(xPoints[i], yPoints[i] + 120);
+		}
+		groundPoly.addPoint(1500, 700);
+		groundPoly.addPoint(0, 700);
+		groundPoly2.addPoint(1500, 700);
+		groundPoly2.addPoint(0, 700);
+		groundPoly3.addPoint(1500, 700);
+		groundPoly3.addPoint(0, 700);
+		groundPoly4.addPoint(1500, 700);
+		groundPoly4.addPoint(0, 700);
+		groundPoly5.addPoint(1500, 700);
+		groundPoly5.addPoint(0, 700);
 	}
 	
 	public int randInt(int low, int high){
@@ -99,18 +101,16 @@ class GamePanel extends JPanel implements ActionListener{
 	public void paintComponent(Graphics g) {
 		//////////////////////////////////////////////////////
 		gameBack.paintIcon(this, g, -200,-400);
-		g.setColor(new Color(44,122,255));
-		//g.fillRect(0,0,getWidth(),getHeight()); //for blue background
 		g.setColor(new Color(62, 216, 47));
-		g.fillPolygon(xPoints, yPoints, nPoints);
+		g.fillPolygon(groundPoly);
 		g.setColor(new Color(50, 181, 38));
-		g.fillPolygon(xPoints, y2Points, nPoints);
+		g.fillPolygon(groundPoly2);
 		g.setColor(new Color(23, 122, 14));
-		g.fillPolygon(xPoints, y3Points, nPoints);
+		g.fillPolygon(groundPoly3);
 		g.setColor(new Color(9, 86, 12));
-		g.fillPolygon(xPoints, y4Points, nPoints);
+		g.fillPolygon(groundPoly4);
 		g.setColor(new Color(8, 66, 4));
-		g.fillPolygon(xPoints, y5Points, nPoints);
+		g.fillPolygon(groundPoly5);
 		//////////////////////////////////////////////////////
 		
 	}
