@@ -11,8 +11,8 @@ January 26th, 2018: Cameron has map generation with added background JPG file.
 January 27th, 2018: Cameron debugged map generation and integrated with TenaciousTanks.java.
                     Tanks now fall from the sky on initial startup.
                     Rescaled tank images which can now sit on the terrain while moving an at rest.
-                    Began tank object class (deals with health, damage, etc).
-February 5th, 2018: Cameron finihsed angle and movement inputs from users.
+                    Began tank object class (deals with health, damage, etc).  
+February 5th, 2018: Cameron finihsed angle and movement inputs from users.  
 February 6th, 2018: Cameron created turn process. Each player has a selection phase ans shoot phase.
-                    Tailai created and implemented turn images for each user.
+                    Tailai created and implemented turn images for each user.  
                     
