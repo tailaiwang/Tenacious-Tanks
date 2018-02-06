@@ -22,6 +22,7 @@ class GamePanel extends JPanel {
 	
 	ImageIcon gameBack = new ImageIcon("Images/gameBack.jpg"); //images
 	Image green, green1, red, red1;
+	Image redTurn,greenTurn;
 	
 	int greenIndex, redIndex = 0;
 	int greenX = 100; //starting X positions for tanks
@@ -64,6 +65,12 @@ class GamePanel extends JPanel {
     	reds[1] = red;
     	reds[0] = red1;   		
     	////////////////////////////////////////////////
+    	redTurn = new ImageIcon("Images/RedTurn.png").getImage();
+    	redTurn = redTurn.getScaledInstance(300,80,Image.SCALE_SMOOTH);
+    	greenTurn = new ImageIcon("Images/GreenTurn.png").getImage();
+    	greenTurn = greenTurn.getScaledInstance(300,80,Image.SCALE_SMOOTH);
+    	///////////////////////////////////////////////
+    	
     	turnNum = randInt(1, 2);
     	if (turnNum == 1){
     		turn = "p1 select";
@@ -230,6 +237,12 @@ class GamePanel extends JPanel {
 	public void paintComponent(Graphics g){
 		//////////////////////////////////////////////////////
 		gameBack.paintIcon(this, g, -200,-400); //background
+		if (turn == "p1 select"){
+			g.drawImage(greenTurn,(screenX/2) - (greenTurn.getWidth(null)/2),20,this);
+		}
+		else{
+			g.drawImage(redTurn,(screenX/2) - (redTurn.getWidth(null)/2),20,this);
+		}
 		g.setColor(new Color(62, 216, 47));
 		g.fillPolygon(groundPoly); //map polygon
 		g.setColor(new Color(50, 181, 38));
@@ -247,9 +260,9 @@ class GamePanel extends JPanel {
 		g.drawImage(reds[redIndex], redX - 10, redY - 35, this);
 		Graphics2D g2 = (Graphics2D) g;
         g2.setStroke(new BasicStroke(5)); //green tank barrel colour
-        g.setColor(new Color(0, 255, 38));
-		g2.drawLine(greenX + 40, greenY, greenX + 40 + (int) (20*(Math.cos(Math.toDegrees(greenAngle)))), greenY - (int) (20*(Math.sin(Math.toDegrees(greenAngle))))); //barrel from green tank
+        g.setColor(new Color(33, 255, 0));
+		g2.drawLine(greenX + 40, greenY, greenX + 40 + (int) (20*(Math.cos(Math.toRadians(greenAngle)))), greenY - (int) (20*(Math.sin(Math.toRadians(greenAngle))))); //barrel from green tank
 		g.setColor(new Color(244, 22, 14)); //red tank barrel colour
-		g2.drawLine(redX + 40, redY, redX + 40 + (int) (20*(Math.cos(Math.toDegrees(redAngle)))), redY - (int) (20*(Math.sin(Math.toDegrees(redAngle))))); //barrel from green tank
+		g2.drawLine(redX + 40, redY, redX + 40 + (int) (20*(Math.cos(Math.toRadians(redAngle)))), redY - (int) (20*(Math.sin(Math.toRadians(redAngle))))); //barrel from green tank
 	}
 }
