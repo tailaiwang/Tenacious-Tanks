@@ -17,6 +17,9 @@ class GamePanel extends JPanel {
 	int screenX = 1300;
 	int screenY = 700;
 	
+	int turnNum;
+	String turn;
+	
 	ImageIcon gameBack = new ImageIcon("Images/gameBack.jpg"); //images
 	Image green, green1, red, red1;
 	
@@ -24,6 +27,8 @@ class GamePanel extends JPanel {
 	int greenX = 100; //starting X positions for tanks
 	int redX = 1200;
 	int greenY, redY = 50; //starting Y positions for tanks
+	int greenAngle = 135;
+	int redAngle = 45;
 	private boolean[] keys;
 	private Image[] greens, reds;
 	
@@ -59,15 +64,18 @@ class GamePanel extends JPanel {
     	reds[1] = red;
     	reds[0] = red1;   		
     	////////////////////////////////////////////////
+    	turnNum = randInt(1, 2);
+    	if (turnNum == 1){
+    		turn = "p1 select";
+    	}
+    	else{
+    		turn = "p2 select";
+    	}
+    	 ////////////////////////////////////////////////
     	//new Timer(1000,this).start();
     	makeLand();
 	}
-	
-	public void actionPerformed(ActionEvent evt) {
-    	Object source = evt.getSource();
-    	repaint();
-    }
-    
+	   
 	public void makeLand(){
 		while(true){
 			boolean valid = true;
@@ -119,28 +127,42 @@ class GamePanel extends JPanel {
     	keys[k] = v;
     }
     
-    public void refresh(){
-    	if(keys[KeyEvent.VK_D] ){
-    		if (greenX <= screenX - 85){ //cannot fall off map
-    			greenX += 2;
-    		}
-			greenY -= 3; //push the image down
-			greenIndex = 0;
-			if (!groundPoly.contains(greenX + 40, greenY + 30)){
-				greenY += 3; //push the image up
+    public void p1select(){
+	    	if (keys[KeyEvent.VK_D] ){
+	    		if (greenX <= screenX - 85){ //cannot fall off map
+	    			greenX += 2;
+	    		}
+				greenY -= 3; //push the image down
+				greenIndex = 0;
+				if (!groundPoly.contains(greenX + 40, greenY + 30)){
+					greenY += 3; //push the image up
+				}
 			}
-		}
-		if(keys[KeyEvent.VK_A] ){
-			if (greenX >= 0){ //cannot fall off map
-    			greenX -= 2;
-    		}
-			greenY -= 3;
-			greenIndex = 1;
-			if (!groundPoly.contains(greenX + 40, greenY + 30)){
-				greenY += 3;
+			if (keys[KeyEvent.VK_A] ){
+				if (greenX >= 0){ //cannot fall off map
+	    			greenX -= 2;
+	    		}
+				greenY -= 3;
+				greenIndex = 1;
+				if (!groundPoly.contains(greenX + 40, greenY + 30)){
+					greenY += 3;
+				}
 			}
-		}
-		if(keys[KeyEvent.VK_RIGHT]){
+			if (keys[KeyEvent.VK_W]){
+				greenAngle += 1;
+			}
+			if (keys[KeyEvent.VK_S]){
+				greenAngle -= 1;
+			}
+			if (keys[KeyEvent.VK_SPACE]){
+				//turn = "p1 shoot";
+				turn = "p2 select";
+				//p1Shot = 
+			}
+    }
+    
+    public void p2select(){
+    	if(keys[KeyEvent.VK_RIGHT]){
 			if (redX <= screenX - 85){ //cannot fall off map
     			redX += 2;
     		}
@@ -160,6 +182,43 @@ class GamePanel extends JPanel {
 				redY += 3;
 			}
 		}
+		if (keys[KeyEvent.VK_UP]){
+			redAngle += 1;
+		}
+		if (keys[KeyEvent.VK_DOWN]){
+			redAngle -= 1;
+		}
+		if (keys[KeyEvent.VK_ENTER]){
+			//turn = "p2 shoot";
+			turn = "p1 select";
+			//shot object 
+		}			
+    }
+
+    public void refresh(){
+    	if (turn == "p1 select"){
+    		p1select();
+    	}
+    	if (turn == "p1 shoot"){
+    		/*p1shot.advance();
+    		if(p1shot.hit()){
+    			//damage
+    			turn = "p2 select";
+    		}*/
+			//shot object		
+    	}
+    	if (turn == "p2 select"){
+    		p2select();
+    	}
+    	if (turn == "p2 shoot"){
+    		/*p1shot.advance();
+    		if(p2shot.hit()){
+    			//damage
+    			turn = "p1 select";
+    		}*/
+			//shot object 	
+    	}
+    	
 		if (!groundPoly.contains(greenX + 40, greenY + 30)){
 			greenY += 3;
 		}
@@ -186,9 +245,11 @@ class GamePanel extends JPanel {
 		//g.drawRect(greenX, greenY, 80, 30); //green tank box outline
 		g.drawImage(greens[greenIndex], greenX - 10, greenY - 35, this); //draw tanks
 		g.drawImage(reds[redIndex], redX - 10, redY - 35, this);
-		//g.setColor(new Color(52, 237, 42));
-		//g.drawLine(greenX + 40, greenY, greenX + 40, greenY - 20);
-		//g.setColor(new Color(244, 22, 14));
-		//g.drawLine(redX + 40, redY, redX + 40, redY - 20);
+		Graphics2D g2 = (Graphics2D) g;
+        g2.setStroke(new BasicStroke(5)); //green tank barrel colour
+        g.setColor(new Color(0, 255, 38));
+		g2.drawLine(greenX + 40, greenY, greenX + 40 + (int) (20*(Math.cos(Math.toDegrees(greenAngle)))), greenY - (int) (20*(Math.sin(Math.toDegrees(greenAngle))))); //barrel from green tank
+		g.setColor(new Color(244, 22, 14)); //red tank barrel colour
+		g2.drawLine(redX + 40, redY, redX + 40 + (int) (20*(Math.cos(Math.toDegrees(redAngle)))), redY - (int) (20*(Math.sin(Math.toDegrees(redAngle))))); //barrel from green tank
 	}
 }
