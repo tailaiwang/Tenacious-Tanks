@@ -26,7 +26,9 @@ class GamePanel extends JPanel {
 	
 	int greenIndex, redIndex = 0;
 	int greenX = 100; //starting X positions for tanks
+	int oldGreenX = greenX;
 	int redX = 1200;
+	int oldRedX = redX;
 	int greenY, redY = 50; //starting Y positions for tanks
 	int greenAngle = 45;
 	int redAngle = 135;
@@ -66,11 +68,10 @@ class GamePanel extends JPanel {
     	reds[0] = red1;   		
     	////////////////////////////////////////////////
     	redTurn = new ImageIcon("Images/RedTurn.png").getImage();
-    	redTurn = redTurn.getScaledInstance(300,80,Image.SCALE_SMOOTH);
+    	redTurn = redTurn.getScaledInstance(300, 80, Image.SCALE_SMOOTH);
     	greenTurn = new ImageIcon("Images/GreenTurn.png").getImage();
-    	greenTurn = greenTurn.getScaledInstance(300,80,Image.SCALE_SMOOTH);
+    	greenTurn = greenTurn.getScaledInstance(300, 80, Image.SCALE_SMOOTH);
     	///////////////////////////////////////////////
-    	
     	turnNum = randInt(1, 2);
     	if (turnNum == 1){
     		turn = "p1 select";
@@ -135,43 +136,53 @@ class GamePanel extends JPanel {
     }
     
     public void p1select(){
-	    	if (keys[KeyEvent.VK_D] ){
-	    		if (greenX <= screenX - 85){ //cannot fall off map
+	    if (keys[KeyEvent.VK_D]){
+	    	if (greenX <= screenX - 85){ //cannot fall off map
+	    		if (greenX < oldGreenX + 100){ //restrict movement
 	    			greenX += 2;
 	    		}
-				greenY -= 3; //push the image down
-				greenIndex = 0;
-				if (!groundPoly.contains(greenX + 40, greenY + 30)){
-					greenY += 3; //push the image up
-				}
+	    		//greenX += 2;
+	    	}
+			greenY -= 3; //push the image down
+			greenIndex = 0;
+			if (!groundPoly.contains(greenX + 40, greenY + 30)){
+				greenY += 3; //push the image up
 			}
-			if (keys[KeyEvent.VK_A] ){
-				if (greenX >= 0){ //cannot fall off map
+		}
+		if (keys[KeyEvent.VK_A] ){
+			if (greenX >= 0){ //cannot fall off map
+			if (greenX > oldGreenX - 100){ //restrict movement
 	    			greenX -= 2;
 	    		}
-				greenY -= 3;
-				greenIndex = 1;
-				if (!groundPoly.contains(greenX + 40, greenY + 30)){
-					greenY += 3;
-				}
+	    		//greenX -= 2;
+	    	}
+			greenY -= 3;
+			greenIndex = 1;
+			if (!groundPoly.contains(greenX + 40, greenY + 30)){
+				greenY += 3;
 			}
-			if (keys[KeyEvent.VK_W]){
-				greenAngle += 1;
-			}
-			if (keys[KeyEvent.VK_S]){
-				greenAngle -= 1;
-			}
-			if (keys[KeyEvent.VK_SPACE]){
-				//turn = "p1 shoot";
-				turn = "p2 select";
-				//p1Shot = 
-			}
+		}
+		if (keys[KeyEvent.VK_W]){
+			greenAngle += 1;
+		}
+		if (keys[KeyEvent.VK_S]){
+			greenAngle -= 1;
+		}
+		if (keys[KeyEvent.VK_SPACE]){
+			//turn = "p1 shoot";
+			turn = "p2 select";
+			oldRedX = redX;
+			//p1Shot = 
+		}
     }
     
     public void p2select(){
     	if(keys[KeyEvent.VK_RIGHT]){
 			if (redX <= screenX - 85){ //cannot fall off map
-    			redX += 2;
+				if (redX < oldRedX + 100){ //restrict movement
+	    				redX += 2;
+	    			}
+	    			//redX +=2;
     		}
 			redY -= 3;
 			redIndex = 1;
@@ -181,7 +192,10 @@ class GamePanel extends JPanel {
 		}
 		if(keys[KeyEvent.VK_LEFT]){
 			if (redX >= 0){ //cannot fall off map
-    			redX -= 2;
+				if (redX > oldRedX - 100){ //restrict movement
+	    				redX -= 2;
+	    			}
+    			//redX -= 2;
     		}
 			redY -= 3;
 			redIndex = 0;
@@ -198,6 +212,7 @@ class GamePanel extends JPanel {
 		if (keys[KeyEvent.VK_ENTER]){
 			//turn = "p2 shoot";
 			turn = "p1 select";
+			oldGreenX = greenX;
 			//shot object 
 		}			
     }
@@ -238,10 +253,10 @@ class GamePanel extends JPanel {
 		//////////////////////////////////////////////////////
 		gameBack.paintIcon(this, g, -200,-400); //background
 		if (turn == "p1 select"){
-			g.drawImage(greenTurn,(screenX/2) - (greenTurn.getWidth(null)/2),20,this);
+			g.drawImage(greenTurn, (screenX / 2) - (greenTurn.getWidth(null) / 2), 20, this);
 		}
 		else{
-			g.drawImage(redTurn,(screenX/2) - (redTurn.getWidth(null)/2),20,this);
+			g.drawImage(redTurn, (screenX/2) - (redTurn.getWidth(null) / 2), 20, this);
 		}
 		g.setColor(new Color(62, 216, 47));
 		g.fillPolygon(groundPoly); //map polygon
