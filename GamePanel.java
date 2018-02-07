@@ -28,8 +28,8 @@ class GamePanel extends JPanel {
 	int greenX = 100; //starting X positions for tanks
 	int redX = 1200;
 	int greenY, redY = 50; //starting Y positions for tanks
-	int greenAngle = 135;
-	int redAngle = 45;
+	int greenAngle = 45;
+	int redAngle = 135;
 	private boolean[] keys;
 	private Image[] greens, reds;
 	
@@ -189,10 +189,10 @@ class GamePanel extends JPanel {
 				redY += 3;
 			}
 		}
-		if (keys[KeyEvent.VK_UP]){
+		if (keys[KeyEvent.VK_DOWN]){
 			redAngle += 1;
 		}
-		if (keys[KeyEvent.VK_DOWN]){
+		if (keys[KeyEvent.VK_UP]){
 			redAngle -= 1;
 		}
 		if (keys[KeyEvent.VK_ENTER]){
