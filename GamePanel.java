@@ -81,7 +81,7 @@ class GamePanel extends JPanel {
     	}
     	 ////////////////////////////////////////////////
     	//new Timer(1000,this).start();
-    	makeLand();
+    	makeLand(); //generate the land
 	}
 	   
 	public void makeLand(){
