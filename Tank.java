@@ -10,7 +10,6 @@
 public class Tank {
 	private int health;
 	private boolean move = true;
-	private int angle = 90;
 	
     public Tank() {
     	health = 100;
@@ -31,11 +30,7 @@ public class Tank {
    		return move;
    	}
    	
-    public void setMove(){
+    public void moveFalse(){
     	move = false;
-    }
-    
-    public int getAngle(){
-    	return angle;
     }
 }
