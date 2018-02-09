@@ -16,5 +16,9 @@ February 5th, 2018: Cameron finihsed angle and movement inputs from users.
 February 6th, 2018: Cameron created turn process. Each player has a selection phase ans shoot phase.
                     Tailai created and implemented turn images for each user.  
 February 7th, 2018: Cameron finished movement restriction for tanks. (Can only move up to 50 pixels left or right during selection phase)  
+February 8th, 2018: Cameron started bullet class.  
+                    Bullets now fly using power, angle and positions given by users.  
+                    Bullets are affected by "gravity" and can now collide with ground and tank rectangles.  
+                    
 
                     
