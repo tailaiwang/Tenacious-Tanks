@@ -10,16 +10,21 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.awt.image.*;
+import javafx.scene.shape.Ellipse;
 
-class GamePanel extends JPanel {
+public class GamePanel extends JPanel {
 	
 	Tank redTank, greenTank; //tank objects
 	int screenX = 1300;
 	int screenY = 700;
 	
-	int turnNum;
+	int turnNum; //turn variables
 	String turn;
 	
+	Bullet p1shot, p2shot; //shots and bullets
+	Ellipse p1bullet = new Ellipse();
+	Ellipse p2bullet = new Ellipse();
+
 	ImageIcon gameBack = new ImageIcon("Images/gameBack.jpg"); //images
 	Image green, green1, red, red1;
 	Image redTurn,greenTurn;
@@ -32,6 +37,9 @@ class GamePanel extends JPanel {
 	int greenY, redY = 50; //starting Y positions for tanks
 	int greenAngle = 45;
 	int redAngle = 135;
+	Rectangle greenTankRect = new Rectangle(redX, redY, 78, 30);
+	Rectangle redTankRect = new Rectangle(greenX, greenY, 78, 30); //tank rectangles	
+	
 	private boolean[] keys;
 	private Image[] greens, reds;
 	
@@ -169,10 +177,12 @@ class GamePanel extends JPanel {
 			greenAngle -= 1;
 		}
 		if (keys[KeyEvent.VK_SPACE]){
-			//turn = "p1 shoot";
-			turn = "p2 select";
+			turn = "p1 shoot"; 
+			p1shot = new Bullet(60, greenAngle,  greenX + 40 + (int) (20*(Math.cos(Math.toRadians(greenAngle)))), greenY - (int) (20*(Math.sin(Math.toRadians(greenAngle)))));
+			p1bullet.setRadiusX(10);
+			p1bullet.setRadiusY(10);
 			oldRedX = redX;
-			//p1Shot = 
+
 		}
     }
     
@@ -210,35 +220,46 @@ class GamePanel extends JPanel {
 			redAngle -= 1;
 		}
 		if (keys[KeyEvent.VK_ENTER]){
-			//turn = "p2 shoot";
-			turn = "p1 select";
+			turn = "p2 shoot";
+			p2shot = new Bullet(60, redAngle,  redX + 40 + (int) (20*(Math.cos(Math.toRadians(redAngle)))), redY - (int) (20*(Math.sin(Math.toRadians(redAngle)))));
+			p2bullet.setRadiusX(10);
+			p2bullet.setRadiusY(10);
 			oldGreenX = greenX;
-			//shot object 
 		}			
     }
 
     public void refresh(){
+    	greenTankRect.x = greenX;
+    	greenTankRect.y = greenY;
+    	redTankRect.x = redX;
+    	redTankRect.y = redY;
     	if (turn == "p1 select"){
     		p1select();
     	}
     	if (turn == "p1 shoot"){
-    		/*p1shot.advance();
-    		if(p1shot.hit()){
-    			//damage
-    			turn = "p2 select";
-    		}*/
-			//shot object		
+    		p1shot.advance();
+    		p1bullet.setCenterX(p1shot.getX());
+			p1bullet.setCenterY(p1shot.getY());
+			if (groundPoly.contains(p1shot.getX(), p1shot.getY())){ //when the shot hits the ground
+				turn = "p2 select";
+			}
+			if (redTankRect.contains(p1shot.getX(), p1shot.getY())){ //check for hit against opponent
+				turn = "p2 select";
+			}
     	}
     	if (turn == "p2 select"){
     		p2select();
     	}
     	if (turn == "p2 shoot"){
-    		/*p1shot.advance();
-    		if(p2shot.hit()){
-    			//damage
-    			turn = "p1 select";
-    		}*/
-			//shot object 	
+    		p2shot.advance();
+    		p2bullet.setCenterX(p2shot.getX());
+			p2bullet.setCenterY(p2shot.getY());
+			if (groundPoly.contains(p2shot.getX(), p2shot.getY())){ //when the shot hits the ground
+				turn = "p1 select";
+			}
+			if (greenTankRect.contains(p2shot.getX(), p2shot.getY())){ //check for hit against opponent
+				turn = "p1 select";
+			}	
     	}
     	
 		if (!groundPoly.contains(greenX + 40, greenY + 30)){
@@ -250,13 +271,20 @@ class GamePanel extends JPanel {
     }
     
 	public void paintComponent(Graphics g){
+		Graphics2D g2 = (Graphics2D) g;
 		//////////////////////////////////////////////////////
 		gameBack.paintIcon(this, g, -200,-400); //background
 		if (turn == "p1 select"){
 			g.drawImage(greenTurn, (screenX / 2) - (greenTurn.getWidth(null) / 2), 20, this);
 		}
-		else{
+		if (turn == "p1 shoot"){
+			g.fillOval(p1shot.getX(), p1shot.getY(), 10, 10);
+		}
+		if (turn == "p2 select"){
 			g.drawImage(redTurn, (screenX/2) - (redTurn.getWidth(null) / 2), 20, this);
+		}
+		if (turn == "p2 shoot"){
+			g.fillOval(p2shot.getX(), p2shot.getY(), 10, 10);
 		}
 		g.setColor(new Color(62, 216, 47));
 		g.fillPolygon(groundPoly); //map polygon
@@ -269,11 +297,10 @@ class GamePanel extends JPanel {
 		g.setColor(new Color(8, 66, 4));
 		g.fillPolygon(groundPoly5);
 		//////////////////////////////////////////////////////
-		//g.drawRect(redX, redY, 80, 30); //red tank box outline
-		//g.drawRect(greenX, greenY, 80, 30); //green tank box outline
+		//g2.draw(redTankRect); //tank rectangles
+		//g2.draw(greenTankRect);
 		g.drawImage(greens[greenIndex], greenX - 10, greenY - 35, this); //draw tanks
 		g.drawImage(reds[redIndex], redX - 10, redY - 35, this);
-		Graphics2D g2 = (Graphics2D) g;
         g2.setStroke(new BasicStroke(5)); //green tank barrel colour
         g.setColor(new Color(33, 255, 0));
 		g2.drawLine(greenX + 40, greenY, greenX + 40 + (int) (20*(Math.cos(Math.toRadians(greenAngle)))), greenY - (int) (20*(Math.sin(Math.toRadians(greenAngle))))); //barrel from green tank

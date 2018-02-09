@@ -30,7 +30,7 @@ public class TenaciousTanks extends JFrame implements ActionListener, KeyListene
     	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
     
-    public void actionPerformed(ActionEvent e){
+    public void actionPerformed(ActionEvent e) {
     	if(game != null){
     		game.refresh();
     		game.repaint();
@@ -47,7 +47,7 @@ public class TenaciousTanks extends JFrame implements ActionListener, KeyListene
     	game.setKey(e.getKeyCode(),false);
     }
     
-    public static void main(String[]args){
+    public static void main(String[]args) {
     	new TenaciousTanks();
     }
 }
