@@ -14,7 +14,6 @@ import javafx.scene.shape.Ellipse;
 import javax.sound.sampled.*;
 
 public class GamePanel extends JPanel {
-	
 	Tank redTank, greenTank; //tank objects
 	int screenX = 1300;
 	int screenY = 700;
@@ -88,6 +87,7 @@ public class GamePanel extends JPanel {
     	}
     	 ////////////////////////////////////////////////
     	//new Timer(1000,this).start();
+    	////////////////////////////////////////////////
     	makeLand(); //generate the land
 	}
 	   
@@ -170,10 +170,20 @@ public class GamePanel extends JPanel {
 			}
 		}
 		if (keys[KeyEvent.VK_W]){
-			greenAngle += 1;
+			if(greenAngle < 360){
+				greenAngle += 1;
+			}
+			else{
+				greenAngle = 0;
+			}
 		}
 		if (keys[KeyEvent.VK_S]){
-			greenAngle -= 1;
+			if(greenAngle > 0){
+				greenAngle -= 1;
+			}
+			else{
+				greenAngle = 360;
+			}
 		}
 		if (keys[KeyEvent.VK_SPACE]){
 			turn = "p1 shoot"; 
@@ -213,10 +223,20 @@ public class GamePanel extends JPanel {
 			}
 		}
 		if (keys[KeyEvent.VK_DOWN]){
-			redAngle += 1;
+			if (redAngle < 360){
+				redAngle += 1;
+			}
+			else{
+				redAngle = 0;
+			}
 		}
 		if (keys[KeyEvent.VK_UP]){
-			redAngle -= 1;
+			if (redAngle > 0){
+				redAngle -= 1;
+			}
+			else{
+				redAngle = 360;
+			}
 		}
 		if (keys[KeyEvent.VK_ENTER]){
 			turn = "p2 shoot";
@@ -243,6 +263,7 @@ public class GamePanel extends JPanel {
 				turn = "p2 select";
 			}
 			if (redTankRect.contains(p1shot.getX(), p1shot.getY())){ //check for hit against opponent
+				redTank.takeDamage(20);
 				turn = "p2 select";
 			}
 			if (p1shot.getX() < -50 || p1shot.getX() > 1350){ //shot goes off the side of screen
@@ -260,6 +281,7 @@ public class GamePanel extends JPanel {
 				turn = "p1 select";
 			}
 			if (greenTankRect.contains(p2shot.getX(), p2shot.getY())){ //check for hit against opponent
+				greenTank.takeDamage(20);
 				turn = "p1 select";
 			}
 			if (p2shot.getX() < -50 || p2shot.getX() > 1350){ //shot goes off the side of screen
@@ -311,5 +333,15 @@ public class GamePanel extends JPanel {
 		g2.drawLine(greenX + 40, greenY, greenX + 40 + (int) (20*(Math.cos(Math.toRadians(greenAngle)))), greenY - (int) (20*(Math.sin(Math.toRadians(greenAngle))))); //barrel from green tank
 		g.setColor(new Color(244, 22, 14)); //red tank barrel colour
 		g2.drawLine(redX + 40, redY, redX + 40 + (int) (20*(Math.cos(Math.toRadians(redAngle)))), redY - (int) (20*(Math.sin(Math.toRadians(redAngle))))); //barrel from green tank
+		///////////////////////////////////////////////////
+		g.setColor(Color.RED);
+		g.setFont(new Font("Arial Black",Font.PLAIN,32));
+		g.drawString("Health:" + redTank.getHealth(), 1000,70);
+		g.setColor(Color.GREEN);
+		g.drawString("Health:" + greenTank.getHealth(),20,70);
+		g.setColor(Color.RED);
+		g.drawString("Angle:" + redAngle, 1000,120);
+		g.setColor(Color.GREEN);
+		g.drawString("Angle:" + greenAngle,20,120);
 	}
 }

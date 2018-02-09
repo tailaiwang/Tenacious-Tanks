@@ -29,7 +29,7 @@ public class Bullet {
     	x += vx;
     	vy += 0.15; //gravity acting on bullet
     	y += vy;
-    	System.out.printf("%f, %f\n", vx, vy);
+    	//System.out.printf("%f, %f\n", vx, vy);
     }
     
     public int getX(){
