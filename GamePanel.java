@@ -11,6 +11,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.awt.image.*;
 import javafx.scene.shape.Ellipse;
+import javax.sound.sampled.*;
 
 public class GamePanel extends JPanel {
 	
@@ -51,8 +52,6 @@ public class GamePanel extends JPanel {
 	
 	int xPoints[] = new int[522]; //point lists for polygons
 	int yPoints[] = new int[522];
-	
-	JTextArea redHealthText = new JTextArea(5, 40);
 	
 	public GamePanel(){
 		keys = new boolean [KeyEvent.KEY_LAST+1];
@@ -246,6 +245,9 @@ public class GamePanel extends JPanel {
 			if (redTankRect.contains(p1shot.getX(), p1shot.getY())){ //check for hit against opponent
 				turn = "p2 select";
 			}
+			if (p1shot.getX() < -50 || p1shot.getX() > 1350){ //shot goes off the side of screen
+				turn = "p2 select";
+			}
     	}
     	if (turn == "p2 select"){
     		p2select();
@@ -259,7 +261,10 @@ public class GamePanel extends JPanel {
 			}
 			if (greenTankRect.contains(p2shot.getX(), p2shot.getY())){ //check for hit against opponent
 				turn = "p1 select";
-			}	
+			}
+			if (p2shot.getX() < -50 || p2shot.getX() > 1350){ //shot goes off the side of screen
+				turn = "p1 select";
+			}
     	}
     	
 		if (!groundPoly.contains(greenX + 40, greenY + 30)){
