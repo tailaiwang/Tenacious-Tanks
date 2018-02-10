@@ -187,6 +187,16 @@ public class GamePanel extends JPanel {
 				greenAngle = 360;
 			}
 		}
+		if (keys[KeyEvent.VK_E]){
+			if (greenPower > -1 && greenPower < 100){
+				greenPower += 1;
+			}
+		}
+		if (keys[KeyEvent.VK_Q]){
+			if (greenPower > 0 && greenPower < 101){
+				greenPower -= 1;
+			}
+		}
 		if (keys[KeyEvent.VK_SPACE]){
 			turn = "p1 shoot"; 
 			p1shot = new Bullet(greenPower, greenAngle,  greenX + 40 + (int) (20*(Math.cos(Math.toRadians(greenAngle)))), greenY - (int) (20*(Math.sin(Math.toRadians(greenAngle)))));
@@ -258,6 +268,16 @@ public class GamePanel extends JPanel {
 			}
 			else{
 				redAngle = 360;
+			}
+		}
+		if (keys[KeyEvent.VK_PERIOD]){
+			if (redPower > -1 && redPower < 100){
+				redPower += 1;
+			}
+		}
+		if (keys[KeyEvent.VK_SLASH]){
+			if (redPower > 0 && redPower < 101){
+				redPower -= 1;
 			}
 		}
 		if (keys[KeyEvent.VK_ENTER]){
