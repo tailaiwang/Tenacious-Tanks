@@ -13,7 +13,7 @@ import java.awt.image.*;
 import javafx.scene.shape.Ellipse;
 import javax.sound.sampled.*;
 
-public class TenaciousTanks extends JFrame implements ActionListener, KeyListener{
+public class TenaciousTanks extends JFrame implements ActionListener, KeyListener {
 	Timer myTimer;
 	GamePanel game;
 	int screenX = 1300;

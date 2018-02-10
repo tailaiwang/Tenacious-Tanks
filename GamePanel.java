@@ -35,8 +35,10 @@ public class GamePanel extends JPanel {
 	int redX = 1200;
 	int oldRedX = redX;
 	int greenY, redY = 50; //starting Y positions for tanks
-	int greenAngle = 45;
+	int greenAngle = 45; //starting angles
 	int redAngle = 135;
+	int greenPower = 50; //starting powers
+	int redPower = 50;
 	Rectangle greenTankRect = new Rectangle(redX, redY, 78, 30);
 	Rectangle redTankRect = new Rectangle(greenX, greenY, 78, 30); //tank rectangles	
 	
@@ -187,11 +189,31 @@ public class GamePanel extends JPanel {
 		}
 		if (keys[KeyEvent.VK_SPACE]){
 			turn = "p1 shoot"; 
-			p1shot = new Bullet(60, greenAngle,  greenX + 40 + (int) (20*(Math.cos(Math.toRadians(greenAngle)))), greenY - (int) (20*(Math.sin(Math.toRadians(greenAngle)))));
+			p1shot = new Bullet(greenPower, greenAngle,  greenX + 40 + (int) (20*(Math.cos(Math.toRadians(greenAngle)))), greenY - (int) (20*(Math.sin(Math.toRadians(greenAngle)))));
 			p1bullet.setRadiusX(10);
 			p1bullet.setRadiusY(10);
 			oldRedX = redX;
 
+		}
+    }
+    
+    public void p1shoot(){
+    	p1shot.advance();
+    	p1bullet.setCenterX(p1shot.getX());
+		p1bullet.setCenterY(p1shot.getY());
+		if (groundPoly.contains(p1shot.getX(), p1shot.getY())){ //when the shot hits the ground
+			turn = "p2 select";
+		}
+		if (redTankRect.contains(p1shot.getX(), p1shot.getY())){ //check for hit against opponent
+			redTank.takeDamage(20);
+			turn = "p2 select";
+		}
+		if (greenTankRect.contains(p1shot.getX(), p1shot.getY())){ //check for hit against itself
+			greenTank.takeDamage(20);
+			turn = "p2 select";
+		}
+		if (p1shot.getX() < -50 || p1shot.getX() > 1350){ //shot goes off the side of screen
+			turn = "p2 select";
 		}
     }
     
@@ -240,11 +262,31 @@ public class GamePanel extends JPanel {
 		}
 		if (keys[KeyEvent.VK_ENTER]){
 			turn = "p2 shoot";
-			p2shot = new Bullet(60, redAngle,  redX + 40 + (int) (20*(Math.cos(Math.toRadians(redAngle)))), redY - (int) (20*(Math.sin(Math.toRadians(redAngle)))));
+			p2shot = new Bullet(redPower, redAngle,  redX + 40 + (int) (20*(Math.cos(Math.toRadians(redAngle)))), redY - (int) (20*(Math.sin(Math.toRadians(redAngle)))));
 			p2bullet.setRadiusX(10);
 			p2bullet.setRadiusY(10);
 			oldGreenX = greenX;
 		}			
+    }
+    
+    public void p2shoot(){
+    	p2shot.advance();
+    	p2bullet.setCenterX(p2shot.getX());
+		p2bullet.setCenterY(p2shot.getY());
+		if (groundPoly.contains(p2shot.getX(), p2shot.getY())){ //when the shot hits the ground
+			turn = "p1 select";
+		}
+		if (greenTankRect.contains(p2shot.getX(), p2shot.getY())){ //check for hit against opponent
+			greenTank.takeDamage(20);
+			turn = "p1 select";
+		}
+		if (redTankRect.contains(p2shot.getX(), p2shot.getY())){ //check for hit against itself
+			redTank.takeDamage(20);
+			turn = "p1 select";
+		}
+		if (p2shot.getX() < -50 || p2shot.getX() > 1350){ //shot goes off the side of screen
+			turn = "p1 select";
+		}
     }
 
     public void refresh(){
@@ -256,39 +298,14 @@ public class GamePanel extends JPanel {
     		p1select();
     	}
     	if (turn == "p1 shoot"){
-    		p1shot.advance();
-    		p1bullet.setCenterX(p1shot.getX());
-			p1bullet.setCenterY(p1shot.getY());
-			if (groundPoly.contains(p1shot.getX(), p1shot.getY())){ //when the shot hits the ground
-				turn = "p2 select";
-			}
-			if (redTankRect.contains(p1shot.getX(), p1shot.getY())){ //check for hit against opponent
-				redTank.takeDamage(20);
-				turn = "p2 select";
-			}
-			if (p1shot.getX() < -50 || p1shot.getX() > 1350){ //shot goes off the side of screen
-				turn = "p2 select";
-			}
+    		p1shoot();
     	}
     	if (turn == "p2 select"){
     		p2select();
     	}
     	if (turn == "p2 shoot"){
-    		p2shot.advance();
-    		p2bullet.setCenterX(p2shot.getX());
-			p2bullet.setCenterY(p2shot.getY());
-			if (groundPoly.contains(p2shot.getX(), p2shot.getY())){ //when the shot hits the ground
-				turn = "p1 select";
-			}
-			if (greenTankRect.contains(p2shot.getX(), p2shot.getY())){ //check for hit against opponent
-				greenTank.takeDamage(20);
-				turn = "p1 select";
-			}
-			if (p2shot.getX() < -50 || p2shot.getX() > 1350){ //shot goes off the side of screen
-				turn = "p1 select";
-			}
+    		p2shoot();	
     	}
-    	
 		if (!groundPoly.contains(greenX + 40, greenY + 30)){
 			greenY += 3;
 		}
@@ -306,12 +323,14 @@ public class GamePanel extends JPanel {
 		}
 		if (turn == "p1 shoot"){
 			g.fillOval(p1shot.getX(), p1shot.getY(), 10, 10);
+			g.drawImage(greenTurn, (screenX / 2) - (greenTurn.getWidth(null) / 2), 20, this);
 		}
 		if (turn == "p2 select"){
 			g.drawImage(redTurn, (screenX/2) - (redTurn.getWidth(null) / 2), 20, this);
 		}
 		if (turn == "p2 shoot"){
 			g.fillOval(p2shot.getX(), p2shot.getY(), 10, 10);
+			g.drawImage(redTurn, (screenX/2) - (redTurn.getWidth(null) / 2), 20, this);
 		}
 		g.setColor(new Color(62, 216, 47));
 		g.fillPolygon(groundPoly); //map polygon
@@ -334,14 +353,14 @@ public class GamePanel extends JPanel {
 		g.setColor(new Color(244, 22, 14)); //red tank barrel colour
 		g2.drawLine(redX + 40, redY, redX + 40 + (int) (20*(Math.cos(Math.toRadians(redAngle)))), redY - (int) (20*(Math.sin(Math.toRadians(redAngle))))); //barrel from green tank
 		///////////////////////////////////////////////////
-		g.setColor(Color.RED);
-		g.setFont(new Font("Arial Black",Font.PLAIN,32));
-		g.drawString("Health:" + redTank.getHealth(), 1000,70);
+		g.setFont(new Font("Arial Black", Font.PLAIN, 25));
 		g.setColor(Color.GREEN);
-		g.drawString("Health:" + greenTank.getHealth(),20,70);
+		g.drawString("Health: " + greenTank.getHealth(), 5, 25);
+		g.drawString("Angle: " + greenAngle, 5, 55);
+		g.drawString("Power: " + greenPower, 5, 85);
 		g.setColor(Color.RED);
-		g.drawString("Angle:" + redAngle, 1000,120);
-		g.setColor(Color.GREEN);
-		g.drawString("Angle:" + greenAngle,20,120);
+		g.drawString("Health: " + redTank.getHealth(), 1130, 25);
+		g.drawString("Angle: " + redAngle, 1130, 55);
+		g.drawString("Power: " + redPower, 1130, 85);	
 	}
 }
