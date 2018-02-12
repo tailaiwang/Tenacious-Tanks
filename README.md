@@ -6,7 +6,7 @@ A 2 Player Tank game made on Java.
 January 22nd, 2018: Project begins  
 January 23rd, 2018: Cameron starts developping Bullet Class and Testing  
 January 24th, 2018: Tailai has PISKEL and PNG files created for basic 2 player movement.  
-January 25th, 2018: Update to TenaciousTanks.java to test out KeyListener.  
+January 25th, 2018: Tailai updated TenaciousTanks.java to test out KeyListener.  
 January 26th, 2018: Cameron has map generation with added background JPG file.
 January 27th, 2018: Cameron debugged map generation and integrated with TenaciousTanks.java.
                     Tanks now fall from the sky on initial startup.
@@ -19,8 +19,9 @@ February 7th, 2018: Cameron finished movement restriction for tanks. (Can only m
 February 8th, 2018: Cameron started bullet class.  
                     Bullets now fly using power, angle and positions given by users.  
                     Bullets are affected by "gravity" and ends turn when it collides with ground and tank rectangles.            
-February 9th, 2018: Tailai made an Update to GamePanel and TenaciousTanks. Game now has text displays and damage is calculated with                             collisions.  
+February 9th, 2018: Tailai made an Update to GamePanel and TenaciousTanks. Game now has text displays and damage is calculated with                           collisions.  
                     Cameron created power for bullets. Users can now select a power between 0 and 100.  
+February 12th, 2018: Tailai made winning screens for both players. The game actually has a purpose now. 
                     
 
                     
