@@ -2,7 +2,8 @@
  * @(#)GamePanel.java
  *
  *
- * @author 
+ * @Cameron Beneteau and Tailai Wang
+ * ICS 4U
  * @version 1.00 2018/2/5
  */
 
@@ -20,6 +21,7 @@ public class GamePanel extends JPanel {
 	
 	int turnNum; //turn variables
 	String turn;
+	String winner; //used for win screen
 	
 	Bullet p1shot, p2shot; //shots and bullets
 	Ellipse p1bullet = new Ellipse();
@@ -27,7 +29,7 @@ public class GamePanel extends JPanel {
 
 	ImageIcon gameBack = new ImageIcon("Images/gameBack.jpg"); //images
 	Image green, green1, red, red1;
-	Image redTurn,greenTurn;
+	Image redTurn,greenTurn,redWins,greenWins,winBack;
 	
 	int greenIndex, redIndex = 0;
 	int greenX = 100; //starting X positions for tanks
@@ -79,6 +81,12 @@ public class GamePanel extends JPanel {
     	redTurn = redTurn.getScaledInstance(300, 80, Image.SCALE_SMOOTH);
     	greenTurn = new ImageIcon("Images/GreenTurn.png").getImage();
     	greenTurn = greenTurn.getScaledInstance(300, 80, Image.SCALE_SMOOTH);
+    	redWins = new ImageIcon("Images/RedWins.png").getImage();
+    	redWins = redWins.getScaledInstance(300,80, Image.SCALE_SMOOTH);
+    	greenWins = new ImageIcon("Images/GreenWins.png").getImage();
+    	greenWins = greenWins.getScaledInstance(300,80, Image.SCALE_SMOOTH);
+    	winBack = new ImageIcon("Images/winBack.jpg").getImage();
+    	winBack = winBack.getScaledInstance(1300,700, Image.SCALE_SMOOTH);
     	///////////////////////////////////////////////
     	turnNum = randInt(1, 2);
     	if (turnNum == 1){
@@ -332,6 +340,14 @@ public class GamePanel extends JPanel {
 		if (!groundPoly.contains(redX + 40, redY + 30)){
 			redY += 3;
 		}
+		if (greenTank.getHealth() == 0){
+			turn = "nothing";
+			winner = "red";
+		}
+		if (redTank.getHealth() == 0){
+			turn = "nothing";
+			winner = "green";
+		}
     }
     
 	public void paintComponent(Graphics g){
@@ -352,6 +368,7 @@ public class GamePanel extends JPanel {
 			g.fillOval(p2shot.getX(), p2shot.getY(), 10, 10);
 			g.drawImage(redTurn, (screenX/2) - (redTurn.getWidth(null) / 2), 20, this);
 		}
+		
 		g.setColor(new Color(62, 216, 47));
 		g.fillPolygon(groundPoly); //map polygon
 		g.setColor(new Color(50, 181, 38));
@@ -382,5 +399,14 @@ public class GamePanel extends JPanel {
 		g.drawString("Health: " + redTank.getHealth(), 1130, 25);
 		g.drawString("Angle: " + redAngle, 1130, 55);
 		g.drawString("Power: " + redPower, 1130, 85);	
+		if (turn == "nothing"){
+			g.drawImage(winBack,0,0,this);
+			if(winner == "red"){
+				g.drawImage(redWins,(screenX/2) - (redWins.getWidth(null)/2),(screenY/2) - (redWins.getHeight(null)/2),this);
+			}
+			if(winner == "green"){
+				g.drawImage(greenWins,(screenX/2) - (greenWins.getWidth(null)/2),(screenY/2) - (greenWins.getHeight(null)/2),this);
+			}
+		}
 	}
 }

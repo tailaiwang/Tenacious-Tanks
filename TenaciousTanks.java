@@ -2,7 +2,8 @@
  * @(#)TenaciousTanks.java
  *
  *
- * @author 
+ * @Cameron Beneteau and Tailai Wang
+ * ICS 4U
  * @version 1.00 2018/1/17
  */
  
