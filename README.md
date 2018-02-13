@@ -21,7 +21,7 @@ February 8th, 2018: Cameron started bullet class.
                     Bullets are affected by "gravity" and ends turn when it collides with ground and tank rectangles.            
 February 9th, 2018: Tailai made an Update to GamePanel and TenaciousTanks. Game now has text displays and damage is calculated with                           collisions.  
                     Cameron created power for bullets. Users can now select a power between 0 and 100.  
-February 12th, 2018: Tailai made winning screens for both players. The game actually has a purpose now. 
+February 12th, 2018: Tailai made and Update to all files, allowing players to actually win the game. No Play Again button yet though... 
                     
 
                     
