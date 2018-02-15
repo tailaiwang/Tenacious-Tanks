@@ -18,10 +18,10 @@ public class GamePanel extends JPanel {
 	Tank redTank, greenTank; //tank objects
 	int screenX = 1300;
 	int screenY = 700;
-	
-	int turnNum; //turn variables
-	String turn;
-	String winner; //used for win screen
+
+	String screen = "game";
+	String turn;  //turn variables
+	int turnNum;
 	
 	Bullet p1shot, p2shot; //shots and bullets
 	Ellipse p1bullet = new Ellipse();
@@ -29,7 +29,7 @@ public class GamePanel extends JPanel {
 
 	ImageIcon gameBack = new ImageIcon("Images/gameBack.jpg"); //images
 	Image green, green1, red, red1;
-	Image redTurn,greenTurn,redWins,greenWins,winBack;
+	Image titleText, titleBack, redTurn, greenTurn, redWins, greenWins, winBack, againText, quitText;
 	
 	int greenIndex, redIndex = 0;
 	int greenX = 100; //starting X positions for tanks
@@ -42,7 +42,9 @@ public class GamePanel extends JPanel {
 	int greenPower = 50; //starting powers
 	int redPower = 50;
 	Rectangle greenTankRect = new Rectangle(redX, redY, 78, 30);
-	Rectangle redTankRect = new Rectangle(greenX, greenY, 78, 30); //tank rectangles	
+	Rectangle redTankRect = new Rectangle(greenX, greenY, 78, 30); //tank rectangles
+	Rectangle againRect = new Rectangle(425, 300, 200, 75); //play again rectangle
+	Rectangle quitRect = new Rectangle(620, 300, 150, 75); //quit rectangle
 	
 	private boolean[] keys;
 	private Image[] greens, reds;
@@ -77,6 +79,8 @@ public class GamePanel extends JPanel {
     	reds[1] = red;
     	reds[0] = red1;   		
     	////////////////////////////////////////////////
+    	titleText = new ImageIcon("Images/titleText.png").getImage();
+    	titleBack = new ImageIcon("Images/titleBack.png").getImage();
     	redTurn = new ImageIcon("Images/RedTurn.png").getImage();
     	redTurn = redTurn.getScaledInstance(300, 80, Image.SCALE_SMOOTH);
     	greenTurn = new ImageIcon("Images/GreenTurn.png").getImage();
@@ -87,6 +91,10 @@ public class GamePanel extends JPanel {
     	greenWins = greenWins.getScaledInstance(300,80, Image.SCALE_SMOOTH);
     	winBack = new ImageIcon("Images/winBack.jpg").getImage();
     	winBack = winBack.getScaledInstance(1300,700, Image.SCALE_SMOOTH);
+    	againText = new ImageIcon("Images/againText.png").getImage();
+    	againText = againText.getScaledInstance(200, 75, Image.SCALE_SMOOTH);
+    	quitText = new ImageIcon("Images/quitText.png").getImage();
+    	quitText = quitText.getScaledInstance(150, 75, Image.SCALE_SMOOTH);
     	///////////////////////////////////////////////
     	turnNum = randInt(1, 2);
     	if (turnNum == 1){
@@ -211,7 +219,6 @@ public class GamePanel extends JPanel {
 			p1bullet.setRadiusX(10);
 			p1bullet.setRadiusY(10);
 			oldRedX = redX;
-
 		}
     }
     
@@ -316,97 +323,120 @@ public class GamePanel extends JPanel {
 			turn = "p1 select";
 		}
     }
+    
+    public void win(){
+    	//everything for the win screen goes in here (play again, quit, etc)
+    }
 
     public void refresh(){
-    	greenTankRect.x = greenX;
-    	greenTankRect.y = greenY;
-    	redTankRect.x = redX;
-    	redTankRect.y = redY;
-    	if (turn == "p1 select"){
-    		p1select();
+    	if (screen == "menu"){
+    		
     	}
-    	if (turn == "p1 shoot"){
-    		p1shoot();
+    	if (screen == "game"){
+	    	greenTankRect.x = greenX;
+   		 	greenTankRect.y = greenY;
+    		redTankRect.x = redX;
+    		redTankRect.y = redY;
+    		if (turn == "p1 select"){
+    			p1select();
+    		}
+    		if (turn == "p1 shoot"){
+    			p1shoot();
+    		}
+    		if (turn == "p2 select"){
+    			p2select();
+    		}
+    		if (turn == "p2 shoot"){
+    			p2shoot();	
+    		}
+			if (!groundPoly.contains(greenX + 40, greenY + 30)){
+				greenY += 3;
+			}
+			if (!groundPoly.contains(redX + 40, redY + 30)){
+				redY += 3;
+			}
+			if (greenTank.getHealth() == 0){
+				screen = "win";
+				turn = "red win";
+			}
+			if (redTank.getHealth() == 0){
+				screen = "win";
+				turn = "green win";
+	    	}
     	}
-    	if (turn == "p2 select"){
-    		p2select();
-    	}
-    	if (turn == "p2 shoot"){
-    		p2shoot();	
-    	}
-		if (!groundPoly.contains(greenX + 40, greenY + 30)){
-			greenY += 3;
-		}
-		if (!groundPoly.contains(redX + 40, redY + 30)){
-			redY += 3;
-		}
-		if (greenTank.getHealth() == 0){
-			turn = "nothing";
-			winner = "red";
-		}
-		if (redTank.getHealth() == 0){
-			turn = "nothing";
-			winner = "green";
-		}
+	    if (screen == "win"){
+	    	win();
+	    }
     }
     
 	public void paintComponent(Graphics g){
 		Graphics2D g2 = (Graphics2D) g;
 		//////////////////////////////////////////////////////
-		gameBack.paintIcon(this, g, -200,-400); //background
-		if (turn == "p1 select"){
-			g.drawImage(greenTurn, (screenX / 2) - (greenTurn.getWidth(null) / 2), 20, this);
+		if (screen == "menu"){
+			g.drawImage(titleText, (screenX / 2) - (titleText.getWidth(null) / 2), 30, this);
+			g.drawImage(titleBack, (screenX / 2) - (titleBack.getWidth(null) / 2), 30, this);
 		}
-		if (turn == "p1 shoot"){
-			g.fillOval(p1shot.getX(), p1shot.getY(), 10, 10);
-			g.drawImage(greenTurn, (screenX / 2) - (greenTurn.getWidth(null) / 2), 20, this);
-		}
-		if (turn == "p2 select"){
-			g.drawImage(redTurn, (screenX/2) - (redTurn.getWidth(null) / 2), 20, this);
-		}
-		if (turn == "p2 shoot"){
-			g.fillOval(p2shot.getX(), p2shot.getY(), 10, 10);
-			g.drawImage(redTurn, (screenX/2) - (redTurn.getWidth(null) / 2), 20, this);
-		}
-		
-		g.setColor(new Color(62, 216, 47));
-		g.fillPolygon(groundPoly); //map polygon
-		g.setColor(new Color(50, 181, 38));
-		g.fillPolygon(groundPoly2);
-		g.setColor(new Color(23, 122, 14));
-		g.fillPolygon(groundPoly3);
-		g.setColor(new Color(9, 86, 12));
-		g.fillPolygon(groundPoly4);
-		g.setColor(new Color(8, 66, 4));
-		g.fillPolygon(groundPoly5);
-		//////////////////////////////////////////////////////
-		//g2.draw(redTankRect); //tank rectangles
-		//g2.draw(greenTankRect);
-		g.drawImage(greens[greenIndex], greenX - 10, greenY - 35, this); //draw tanks
-		g.drawImage(reds[redIndex], redX - 10, redY - 35, this);
-        g2.setStroke(new BasicStroke(5)); //green tank barrel colour
-        g.setColor(new Color(33, 255, 0));
-		g2.drawLine(greenX + 40, greenY, greenX + 40 + (int) (20*(Math.cos(Math.toRadians(greenAngle)))), greenY - (int) (20*(Math.sin(Math.toRadians(greenAngle))))); //barrel from green tank
-		g.setColor(new Color(244, 22, 14)); //red tank barrel colour
-		g2.drawLine(redX + 40, redY, redX + 40 + (int) (20*(Math.cos(Math.toRadians(redAngle)))), redY - (int) (20*(Math.sin(Math.toRadians(redAngle))))); //barrel from green tank
-		///////////////////////////////////////////////////
-		g.setFont(new Font("Arial Black", Font.PLAIN, 25));
-		g.setColor(Color.GREEN);
-		g.drawString("Health: " + greenTank.getHealth(), 5, 25);
-		g.drawString("Angle: " + greenAngle, 5, 55);
-		g.drawString("Power: " + greenPower, 5, 85);
-		g.setColor(Color.RED);
-		g.drawString("Health: " + redTank.getHealth(), 1130, 25);
-		g.drawString("Angle: " + redAngle, 1130, 55);
-		g.drawString("Power: " + redPower, 1130, 85);	
-		if (turn == "nothing"){
-			g.drawImage(winBack,0,0,this);
-			if(winner == "red"){
-				g.drawImage(redWins,(screenX/2) - (redWins.getWidth(null)/2),(screenY/2) - (redWins.getHeight(null)/2),this);
+		if (screen == "game"){
+			gameBack.paintIcon(this, g, -200,-400); //background
+			if (turn == "p1 select"){
+				g.drawImage(greenTurn, (screenX / 2) - (greenTurn.getWidth(null) / 2), 20, this);
 			}
-			if(winner == "green"){
-				g.drawImage(greenWins,(screenX/2) - (greenWins.getWidth(null)/2),(screenY/2) - (greenWins.getHeight(null)/2),this);
+			if (turn == "p1 shoot"){
+				g.fillOval(p1shot.getX(), p1shot.getY(), 10, 10);
+				g.drawImage(greenTurn, (screenX / 2) - (greenTurn.getWidth(null) / 2), 20, this);
 			}
+			if (turn == "p2 select"){
+				g.drawImage(redTurn, (screenX/2) - (redTurn.getWidth(null) / 2), 20, this);
+			}
+			if (turn == "p2 shoot"){
+				g.fillOval(p2shot.getX(), p2shot.getY(), 10, 10);
+				g.drawImage(redTurn, (screenX/2) - (redTurn.getWidth(null) / 2), 20, this);
+			}
+			g.setColor(new Color(62, 216, 47));
+			g.fillPolygon(groundPoly); //map polygon
+			g.setColor(new Color(50, 181, 38));
+			g.fillPolygon(groundPoly2);
+			g.setColor(new Color(23, 122, 14));
+			g.fillPolygon(groundPoly3);
+			g.setColor(new Color(9, 86, 12));
+			g.fillPolygon(groundPoly4);
+			g.setColor(new Color(8, 66, 4));
+			g.fillPolygon(groundPoly5);
+			//////////////////////////////////////////////////////
+			//g2.draw(redTankRect); //tank rectangles
+			//g2.draw(greenTankRect);
+			g.drawImage(greens[greenIndex], greenX - 10, greenY - 35, this); //draw tanks
+			g.drawImage(reds[redIndex], redX - 10, redY - 35, this);
+        	g2.setStroke(new BasicStroke(5)); //green tank barrel colour
+    	    g.setColor(new Color(33, 255, 0));
+			g2.drawLine(greenX + 40, greenY, greenX + 40 + (int) (20*(Math.cos(Math.toRadians(greenAngle)))), greenY - (int) (20*(Math.sin(Math.toRadians(greenAngle))))); //barrel from green tank
+			g.setColor(new Color(244, 22, 14)); //red tank barrel colour
+			g2.drawLine(redX + 40, redY, redX + 40 + (int) (20*(Math.cos(Math.toRadians(redAngle)))), redY - (int) (20*(Math.sin(Math.toRadians(redAngle))))); //barrel from green tank
+			///////////////////////////////////////////////////
+			g.setFont(new Font("Arial Black", Font.PLAIN, 25));
+			g.setColor(Color.GREEN);
+			g.drawString("Health: " + greenTank.getHealth(), 5, 25);
+			g.drawString("Angle: " + greenAngle, 5, 55);
+			g.drawString("Power: " + greenPower, 5, 85);
+			g.setColor(Color.RED);
+			g.drawString("Health: " + redTank.getHealth(), 1130, 25);
+			g.drawString("Angle: " + redAngle, 1130, 55);
+			g.drawString("Power: " + redPower, 1130, 85);
+		}
+		if (screen == "win"){
+			g.drawImage(winBack, 0, 0, this);
+			//g.drawImage(greenWins, (screenX/2) - (redWins.getWidth(null)/2), 200, this);
+			//g2.draw(againRect);
+			//g2.draw(quitRect);
+			g.drawImage(againText, 457, 303, this);
+			g.drawImage(quitText, 683, 303, this);
+			if (turn == "red win"){
+				g.drawImage(redWins, (screenX/2) - (redWins.getWidth(null)/2), 200, this);
+			}
+			if(turn =="green win"){
+				g.drawImage(greenWins, (screenX/2) - (greenWins.getWidth(null)/2), 200, this);
+			}
+			
 		}
 	}
 }

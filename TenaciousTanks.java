@@ -41,11 +41,11 @@ public class TenaciousTanks extends JFrame implements ActionListener, KeyListene
     }
     
     public void keyTyped(KeyEvent e) {}
-
+    
     public void keyPressed(KeyEvent e) {
     	game.setKey(e.getKeyCode(),true);
     }
-
+    
     public void keyReleased(KeyEvent e) {
     	game.setKey(e.getKeyCode(),false);
     }
