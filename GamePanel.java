@@ -29,7 +29,7 @@ public class GamePanel extends JPanel {
 
 	ImageIcon gameBack = new ImageIcon("Images/gameBack.jpg"); //images
 	Image green, green1, red, red1;
-	Image titleText, titleBack, redTurn, greenTurn, redWins, greenWins, winBack;
+	Image titleText, enterText, instructionsText, backspaceText, titleBack, redTurn, greenTurn, redWins, greenWins, winBack, backspaceAgainText, escapeQuitText;
 	
 	int greenIndex, redIndex = 0;
 	int greenX = 100; //starting X positions for tanks
@@ -76,19 +76,32 @@ public class GamePanel extends JPanel {
     	reds = new Image[2];
     	reds[1] = red;
     	reds[0] = red1;   		
-    	////////////////////////////////////////////////
-    	titleText = new ImageIcon("Images/TitleText.png").getImage();
+    	//////////////////////////////////////////////// menu
     	titleBack = new ImageIcon("Images/titleBack.png").getImage();
+    	titleText = new ImageIcon("Images/TitleText.png").getImage();
+    	titleText = titleText.getScaledInstance(900, 200, Image.SCALE_SMOOTH);
+    	enterText = new ImageIcon("Images/enterText.png").getImage();
+    	enterText = enterText.getScaledInstance(600, 75, Image.SCALE_SMOOTH);
+    	//////////////////////////////////////////////// instructions
+    	instructionsText = new ImageIcon("Images/instructionsText.png").getImage();
+    	backspaceText = new ImageIcon("Images/backspaceText.png").getImage();
+    	backspaceText = backspaceText.getScaledInstance(600, 75, Image.SCALE_SMOOTH);
+    	//////////////////////////////////////////////// game
     	redTurn = new ImageIcon("Images/RedTurn.png").getImage();
     	redTurn = redTurn.getScaledInstance(300, 80, Image.SCALE_SMOOTH);
     	greenTurn = new ImageIcon("Images/GreenTurn.png").getImage();
     	greenTurn = greenTurn.getScaledInstance(300, 80, Image.SCALE_SMOOTH);
+    	//////////////////////////////////////////////// win
     	redWins = new ImageIcon("Images/RedWins.png").getImage();
-    	redWins = redWins.getScaledInstance(300,80, Image.SCALE_SMOOTH);
+    	redWins = redWins.getScaledInstance(500,125, Image.SCALE_SMOOTH);
     	greenWins = new ImageIcon("Images/GreenWins.png").getImage();
-    	greenWins = greenWins.getScaledInstance(300,80, Image.SCALE_SMOOTH);
+    	greenWins = greenWins.getScaledInstance(500,125, Image.SCALE_SMOOTH);
     	winBack = new ImageIcon("Images/winBack.jpg").getImage();
     	winBack = winBack.getScaledInstance(1300,700, Image.SCALE_SMOOTH);
+    	backspaceAgainText = new ImageIcon("Images/backspaceAgainText.png").getImage();
+    	backspaceAgainText = backspaceAgainText.getScaledInstance(500, 50, Image.SCALE_SMOOTH);
+    	escapeQuitText = new ImageIcon("Images/escapeQuitText.png").getImage();
+    	escapeQuitText = escapeQuitText.getScaledInstance(400, 50, Image.SCALE_SMOOTH);
     	///////////////////////////////////////////////
     	makeLand(); //generate the land
     	turnNum = randInt(1, 2);
@@ -168,7 +181,6 @@ public class GamePanel extends JPanel {
 	    		if (greenX < oldGreenX + 100){ //restrict movement
 	    			greenX += 2;
 	    		}
-	    		//greenX += 2;
 	    	}
 			greenY -= 3; //push the image down
 			greenIndex = 0;
@@ -181,7 +193,6 @@ public class GamePanel extends JPanel {
 			if (greenX > oldGreenX - 100){ //restrict movement
 	    			greenX -= 2;
 	    		}
-	    		//greenX -= 2;
 	    	}
 			greenY -= 3;
 			greenIndex = 1;
@@ -250,7 +261,6 @@ public class GamePanel extends JPanel {
 				if (redX < oldRedX + 100){ //restrict movement
 	    				redX += 2;
 	    			}
-	    			//redX +=2;
     		}
 			redY -= 3;
 			redIndex = 1;
@@ -263,7 +273,6 @@ public class GamePanel extends JPanel {
 				if (redX > oldRedX - 100){ //restrict movement
 	    				redX -= 2;
 	    			}
-    			//redX -= 2;
     		}
 			redY -= 3;
 			redIndex = 0;
@@ -327,7 +336,29 @@ public class GamePanel extends JPanel {
     }
     
     public void win(){
-    	//everything for the win screen goes in here (play again, quit, etc)
+    	if (keys[KeyEvent.VK_BACK_SPACE]){ //play again (reset all game variables)
+    		redTank.resetHealth();
+    		redX = 1200;
+    		redY = 50;
+    		redPower = 50;
+    		redAngle = 135;
+    		greenTank.resetHealth();
+    		greenX = 100;
+    		greenY = 50;
+    		greenPower = 50;
+    		greenAngle = 45;
+			turnNum = randInt(1, 2); //randomize turn
+	    	if (turnNum == 1){
+   	 			turn = "p1 select";
+    		}
+    		else{
+    			turn = "p2 select";
+    		}
+    		screen = "game"; //go back to game
+		}
+		if (keys[KeyEvent.VK_ESCAPE]){ //quit game
+			System.exit(0); //close window
+		}
     }
 
     public void refresh(){
@@ -376,30 +407,8 @@ public class GamePanel extends JPanel {
     
 	public void paintComponent(Graphics g){
 		Graphics2D g2 = (Graphics2D) g;
-		//////////////////////////////////////////////////////
 		if (screen == "menu"){
-			g.drawImage(titleText, (screenX / 2) - (titleText.getWidth(null) / 2), 30, this);
-			g.drawImage(titleBack, (screenX / 2) - (titleBack.getWidth(null) / 2), 30, this);
-		}
-		if (screen == "instructions"){
-			g.drawImage(titleText, (screenX / 2) - (titleText.getWidth(null) / 2), 200, this);
-		}
-		if (screen == "game"){
-			gameBack.paintIcon(this, g, -200,-400); //background
-			if (turn == "p1 select"){
-				g.drawImage(greenTurn, (screenX / 2) - (greenTurn.getWidth(null) / 2), 20, this);
-			}
-			if (turn == "p1 shoot"){
-				g.fillOval(p1shot.getX(), p1shot.getY(), 10, 10);
-				g.drawImage(greenTurn, (screenX / 2) - (greenTurn.getWidth(null) / 2), 20, this);
-			}
-			if (turn == "p2 select"){
-				g.drawImage(redTurn, (screenX/2) - (redTurn.getWidth(null) / 2), 20, this);
-			}
-			if (turn == "p2 shoot"){
-				g.fillOval(p2shot.getX(), p2shot.getY(), 10, 10);
-				g.drawImage(redTurn, (screenX/2) - (redTurn.getWidth(null) / 2), 20, this);
-			}
+			gameBack.paintIcon(this, g, -200,-400);
 			g.setColor(new Color(62, 216, 47));
 			g.fillPolygon(groundPoly); //map polygon
 			g.setColor(new Color(50, 181, 38));
@@ -410,9 +419,52 @@ public class GamePanel extends JPanel {
 			g.fillPolygon(groundPoly4);
 			g.setColor(new Color(8, 66, 4));
 			g.fillPolygon(groundPoly5);
-			//////////////////////////////////////////////////////
-			//g2.draw(redTankRect); //tank rectangles
-			//g2.draw(greenTankRect);
+			g.drawImage(titleText, (screenX / 2) - (titleText.getWidth(null) / 2), 150, this);
+			g.drawImage(enterText, (screenX / 2) - (enterText.getWidth(null) / 2), 500, this);
+		}
+		if (screen == "instructions"){
+			gameBack.paintIcon(this, g, -200,-400);
+			g.setColor(new Color(62, 216, 47));
+			g.fillPolygon(groundPoly);
+			g.setColor(new Color(50, 181, 38));
+			g.fillPolygon(groundPoly2);
+			g.setColor(new Color(23, 122, 14));
+			g.fillPolygon(groundPoly3);
+			g.setColor(new Color(9, 86, 12));
+			g.fillPolygon(groundPoly4);
+			g.setColor(new Color(8, 66, 4));
+			g.fillPolygon(groundPoly5);
+			g.drawImage(instructionsText, (screenX / 2) - (instructionsText.getWidth(null) / 2), 30, this);
+			g.drawImage(backspaceText, (screenX / 2) - (backspaceText.getWidth(null) / 2), 500, this);
+		}
+		if (screen == "game"){
+			gameBack.paintIcon(this, g, -200,-400); //background
+			if (turn == "p1 select"){
+				g.drawImage(greenTurn, (screenX / 2) - (greenTurn.getWidth(null) / 2), 20, this);
+			}
+			if (turn == "p1 shoot"){
+				g.fillOval(p1shot.getX(), p1shot.getY(), 10, 10); //bullet
+				g.drawImage(greenTurn, (screenX / 2) - (greenTurn.getWidth(null) / 2), 20, this);
+			}
+			if (turn == "p2 select"){
+				g.drawImage(redTurn, (screenX/2) - (redTurn.getWidth(null) / 2), 20, this);
+			}
+			if (turn == "p2 shoot"){
+				g.fillOval(p2shot.getX(), p2shot.getY(), 10, 10); //bullet
+				g.drawImage(redTurn, (screenX/2) - (redTurn.getWidth(null) / 2), 20, this);
+			}
+			////////////////////////////////////////////////////// map
+			g.setColor(new Color(62, 216, 47));
+			g.fillPolygon(groundPoly);
+			g.setColor(new Color(50, 181, 38));
+			g.fillPolygon(groundPoly2);
+			g.setColor(new Color(23, 122, 14));
+			g.fillPolygon(groundPoly3);
+			g.setColor(new Color(9, 86, 12));
+			g.fillPolygon(groundPoly4);
+			g.setColor(new Color(8, 66, 4));
+			g.fillPolygon(groundPoly5);
+			////////////////////////////////////////////////////// tanks
 			g.drawImage(greens[greenIndex], greenX - 10, greenY - 35, this); //draw tanks
 			g.drawImage(reds[redIndex], redX - 10, redY - 35, this);
         	g2.setStroke(new BasicStroke(5)); //green tank barrel colour
@@ -420,7 +472,9 @@ public class GamePanel extends JPanel {
 			g2.drawLine(greenX + 40, greenY, greenX + 40 + (int) (20*(Math.cos(Math.toRadians(greenAngle)))), greenY - (int) (20*(Math.sin(Math.toRadians(greenAngle))))); //barrel from green tank
 			g.setColor(new Color(244, 22, 14)); //red tank barrel colour
 			g2.drawLine(redX + 40, redY, redX + 40 + (int) (20*(Math.cos(Math.toRadians(redAngle)))), redY - (int) (20*(Math.sin(Math.toRadians(redAngle))))); //barrel from green tank
-			///////////////////////////////////////////////////
+			//g2.draw(redTankRect); //tank rectangles
+			//g2.draw(greenTankRect);
+			/////////////////////////////////////////////////// tank information (heath, angle, power)
 			g.setFont(new Font("Arial Black", Font.PLAIN, 25));
 			g.setColor(Color.GREEN);
 			g.drawString("Health: " + greenTank.getHealth(), 5, 25);
@@ -433,13 +487,14 @@ public class GamePanel extends JPanel {
 		}
 		if (screen == "win"){
 			g.drawImage(winBack, 0, 0, this);
+			g.drawImage(backspaceAgainText, (screenX / 2) - (backspaceAgainText.getWidth(null) / 2), 400, this);
+			g.drawImage(escapeQuitText, (screenX / 2) - (escapeQuitText.getWidth(null) / 2), 475, this);
 			if (turn == "red win"){
 				g.drawImage(redWins, (screenX/2) - (redWins.getWidth(null)/2), 200, this);
 			}
 			if(turn =="green win"){
 				g.drawImage(greenWins, (screenX/2) - (greenWins.getWidth(null)/2), 200, this);
 			}
-			
 		}
 	}
 }

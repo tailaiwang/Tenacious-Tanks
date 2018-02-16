@@ -27,6 +27,10 @@ public class Tank {
     	return health;
     }
    	
+   	public void resetHealth(){
+   		health = 100;
+   	}
+   	
    	public boolean getMove(){
    		return move;
    	}

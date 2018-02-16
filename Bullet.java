@@ -14,7 +14,6 @@ public class Bullet {
 	double y;
 	double vx;
 	double vy;
-	
 
     public Bullet(int p, int ang, double xx, double yy) {
     	x = xx;
@@ -25,18 +24,17 @@ public class Bullet {
     	vy = -0.2 * power * (Math.sin(Math.toRadians(angle)));
     }
     
-    public void advance(){
+    public void advance(){ //bullet moving each frame
     	x += vx;
     	vy += 0.15; //gravity acting on bullet
     	y += vy;
-    	//System.out.printf("%f, %f\n", vx, vy);
     }
     
-    public int getX(){
+    public int getX(){ //used to check collision
     	return (int) x;
     }
     
-    public int getY(){
+    public int getY(){ //used to check collision
     	return (int) y;
     }
 }
