@@ -25,7 +25,7 @@ public class TenaciousTanks extends JFrame implements ActionListener, KeyListene
     	setSize(screenX, screenY);
     	myTimer = new Timer (10,this);
     	myTimer.start();
-    	game = new GamePanel();
+    	game = new GamePanel(); //creating game class
     	add(game);
     	addKeyListener(this);
     	setResizable(false);
