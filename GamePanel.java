@@ -19,7 +19,7 @@ public class GamePanel extends JPanel {
 	int screenX = 1300;
 	int screenY = 700;
 
-	String screen = "game";
+	String screen = "menu";
 	String turn;  //turn variables
 	int turnNum;
 	
@@ -29,7 +29,7 @@ public class GamePanel extends JPanel {
 
 	ImageIcon gameBack = new ImageIcon("Images/gameBack.jpg"); //images
 	Image green, green1, red, red1;
-	Image titleText, titleBack, redTurn, greenTurn, redWins, greenWins, winBack, againText, quitText;
+	Image titleText, titleBack, redTurn, greenTurn, redWins, greenWins, winBack;
 	
 	int greenIndex, redIndex = 0;
 	int greenX = 100; //starting X positions for tanks
@@ -43,8 +43,6 @@ public class GamePanel extends JPanel {
 	int redPower = 50;
 	Rectangle greenTankRect = new Rectangle(redX, redY, 78, 30);
 	Rectangle redTankRect = new Rectangle(greenX, greenY, 78, 30); //tank rectangles
-	Rectangle againRect = new Rectangle(425, 300, 200, 75); //play again rectangle
-	Rectangle quitRect = new Rectangle(620, 300, 150, 75); //quit rectangle
 	
 	private boolean[] keys;
 	private Image[] greens, reds;
@@ -79,7 +77,7 @@ public class GamePanel extends JPanel {
     	reds[1] = red;
     	reds[0] = red1;   		
     	////////////////////////////////////////////////
-    	titleText = new ImageIcon("Images/titleText.png").getImage();
+    	titleText = new ImageIcon("Images/TitleText.png").getImage();
     	titleBack = new ImageIcon("Images/titleBack.png").getImage();
     	redTurn = new ImageIcon("Images/RedTurn.png").getImage();
     	redTurn = redTurn.getScaledInstance(300, 80, Image.SCALE_SMOOTH);
@@ -91,11 +89,8 @@ public class GamePanel extends JPanel {
     	greenWins = greenWins.getScaledInstance(300,80, Image.SCALE_SMOOTH);
     	winBack = new ImageIcon("Images/winBack.jpg").getImage();
     	winBack = winBack.getScaledInstance(1300,700, Image.SCALE_SMOOTH);
-    	againText = new ImageIcon("Images/againText.png").getImage();
-    	againText = againText.getScaledInstance(200, 75, Image.SCALE_SMOOTH);
-    	quitText = new ImageIcon("Images/quitText.png").getImage();
-    	quitText = quitText.getScaledInstance(150, 75, Image.SCALE_SMOOTH);
     	///////////////////////////////////////////////
+    	makeLand(); //generate the land
     	turnNum = randInt(1, 2);
     	if (turnNum == 1){
     		turn = "p1 select";
@@ -103,10 +98,6 @@ public class GamePanel extends JPanel {
     	else{
     		turn = "p2 select";
     	}
-    	 ////////////////////////////////////////////////
-    	//new Timer(1000,this).start();
-    	////////////////////////////////////////////////
-    	makeLand(); //generate the land
 	}
 	   
 	public void makeLand(){
@@ -160,6 +151,17 @@ public class GamePanel extends JPanel {
     	keys[k] = v;
     }
     
+    public void menu(){
+    	if (keys[KeyEvent.VK_ENTER]){
+    		screen = "instructions";
+    	}
+    }
+    
+    public void instructions(){
+    	if (keys[KeyEvent.VK_BACK_SPACE]){
+    		screen = "game";
+    	}
+    }
     public void p1select(){
 	    if (keys[KeyEvent.VK_D]){
 	    	if (greenX <= screenX - 85){ //cannot fall off map
@@ -243,7 +245,7 @@ public class GamePanel extends JPanel {
     }
     
     public void p2select(){
-    	if(keys[KeyEvent.VK_RIGHT]){
+    	if (keys[KeyEvent.VK_RIGHT]){
 			if (redX <= screenX - 85){ //cannot fall off map
 				if (redX < oldRedX + 100){ //restrict movement
 	    				redX += 2;
@@ -256,7 +258,7 @@ public class GamePanel extends JPanel {
 				redY += 3;
 			}
 		}
-		if(keys[KeyEvent.VK_LEFT]){
+		if (keys[KeyEvent.VK_LEFT]){
 			if (redX >= 0){ //cannot fall off map
 				if (redX > oldRedX - 100){ //restrict movement
 	    				redX -= 2;
@@ -330,7 +332,10 @@ public class GamePanel extends JPanel {
 
     public void refresh(){
     	if (screen == "menu"){
-    		
+    		menu();
+    	}
+    	if (screen == "instructions"){
+    		instructions();
     	}
     	if (screen == "game"){
 	    	greenTankRect.x = greenX;
@@ -375,6 +380,9 @@ public class GamePanel extends JPanel {
 		if (screen == "menu"){
 			g.drawImage(titleText, (screenX / 2) - (titleText.getWidth(null) / 2), 30, this);
 			g.drawImage(titleBack, (screenX / 2) - (titleBack.getWidth(null) / 2), 30, this);
+		}
+		if (screen == "instructions"){
+			g.drawImage(titleText, (screenX / 2) - (titleText.getWidth(null) / 2), 200, this);
 		}
 		if (screen == "game"){
 			gameBack.paintIcon(this, g, -200,-400); //background
@@ -425,11 +433,6 @@ public class GamePanel extends JPanel {
 		}
 		if (screen == "win"){
 			g.drawImage(winBack, 0, 0, this);
-			//g.drawImage(greenWins, (screenX/2) - (redWins.getWidth(null)/2), 200, this);
-			//g2.draw(againRect);
-			//g2.draw(quitRect);
-			g.drawImage(againText, 457, 303, this);
-			g.drawImage(quitText, 683, 303, this);
 			if (turn == "red win"){
 				g.drawImage(redWins, (screenX/2) - (redWins.getWidth(null)/2), 200, this);
 			}
