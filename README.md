@@ -19,9 +19,10 @@ February 7th, 2018: Cameron finished movement restriction for tanks. (Can only m
 February 8th, 2018: Cameron started bullet class.  
                     Bullets now fly using power, angle and positions given by users.  
                     Bullets are affected by "gravity" and ends turn when it collides with ground and tank rectangles.            
-February 9th, 2018: Tailai made an Update to GamePanel and TenaciousTanks. Game now has text displays and damage is calculated with                           collisions.  
+February 9th, 2018: Tailai made an Update to GamePanel and TenaciousTanks. Game now has text displays and damage is calculated with                             collisions.  
                     Cameron created power for bullets. Users can now select a power between 0 and 100.  
-February 12th, 2018: Tailai made and Update to all files, allowing players to actually win the game. No Play Again button yet though... 
+February 12th, 2018: Tailai made and Update to all files, allowing players to actually win the game. No Play Again button yet though...  
+February 16th, 2018: Cameron created menu and instruction screens. Players can now go through menu and instructions before starting the game. When the game finishes, players can choose to play again (all variables will reset) or exit the window.
                     
 
                     
