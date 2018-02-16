@@ -22,7 +22,7 @@ February 8th, 2018: Cameron started bullet class.
 February 9th, 2018: Tailai made an Update to GamePanel and TenaciousTanks. Game now has text displays and damage is calculated with                             collisions.  
                     Cameron created power for bullets. Users can now select a power between 0 and 100.  
 February 12th, 2018: Tailai made and Update to all files, allowing players to actually win the game. No Play Again button yet though...  
-February 16th, 2018: Cameron created menu and instruction screens. Players can now go through menu and instructions before starting the game. When the game finishes, players can choose to play again (all variables will reset) or exit the window.
+February 16th, 2018: Cameron created menu and instruction screens. Players can now go through menu and instructions before starting the game. When game finishes, players can choose to play again (all variables will reset) or exit the window.
                     
 
                     
