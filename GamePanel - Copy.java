@@ -481,6 +481,21 @@ public class GamePanel extends JPanel {
 			g.fillPolygon(groundPoly5);
 			g.drawImage(instructionsText, (screenX / 2) - (instructionsText.getWidth(null) / 2), 30, this);
 			g.drawImage(backspaceText, (screenX / 2) - (backspaceText.getWidth(null) / 2), 500, this);
+			g.drawImage(instructionsText, (screenX / 2) - (instructionsText.getWidth(null) / 2), 10, this);
+			g.drawImage(backspaceText, (screenX / 2) - (backspaceText.getWidth(null) / 2), 500, this);
+			g.setFont(new Font("Comic Sans MS", Font.PLAIN, 25));
+			g.setColor(Color.BLUE);
+			g.drawString("Welcome to Tenacious Tanks, a 2-Player battle to the Death!",screenX/5 + 20,160);
+			g.setColor(Color.GREEN);
+			g.drawString("Green",400,200);
+			g.drawString("A & D to move",400,240);
+			g.drawString("W & S to angle",400, 260);
+			g.drawString("Q & E to power",400,280);
+			g.setColor(Color.RED);
+			g.drawString("Red", 700,200);
+			g.drawString("LEFT & RIGHT to move",700,240);
+			g.drawString("UP & DOWN to angle", 700, 260);
+			g.drawString(". & ? to power", 700, 280);
 		}
 		if (screen == "game"){
 			gameBack.paintIcon(this, g, -200,-400); //background
