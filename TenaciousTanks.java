@@ -1,9 +1,8 @@
 /**
  * @(#)TenaciousTanks.java
- *
- *
  * @Cameron Beneteau and Tailai Wang
  * ICS 4U
+ * February 19th, 2018
  * @version 1.00 2018/1/17
  */
  
@@ -23,7 +22,7 @@ public class TenaciousTanks extends JFrame implements ActionListener, KeyListene
     public TenaciousTanks() {
     	super("Tenacious Tanks");
     	setSize(screenX, screenY);
-    	myTimer = new Timer (10,this);
+    	myTimer = new Timer (10, this);
     	myTimer.start();
     	game = new GamePanel(); //creating game class
     	add(game);
