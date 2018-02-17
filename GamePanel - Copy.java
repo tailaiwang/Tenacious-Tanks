@@ -251,21 +251,21 @@ public class GamePanel extends JPanel {
 		p1bullet.setCenterY(p1shot.getY());
 		if (groundPoly.contains(p1shot.getX(), p1shot.getY())){ //when the shot hits the ground
 			turn = "p1 explode";
-			explodeX = p1shot.getX();
-			explodeY = p1shot.getY();
+			explodeX = (int) p1bullet.getCenterX();
+			explodeY = (int) p1bullet.getCenterY();
 		}
 		if (redTankRect.contains(p1shot.getX(), p1shot.getY())){ //check for hit against opponent
 			redTank.takeDamage(20);
 			turn = "p1 explode";
-			explodeX = plshot.getX();
-			explodeY = p1shot.getY();
+			explodeX = (int) p1bullet.getCenterX();
+			explodeY = (int) p1bullet.getCenterY();
 			
 		}
 		if (greenTankRect.contains(p1shot.getX(), p1shot.getY())){ //check for hit against itself
 			turn = "p1 explode";
 			greenTank.takeDamage(20);
-			explodeX = plshot.getX();
-			explodeY = p1shot.getY();
+			explodeX = (int) p1bullet.getCenterX();
+			explodeY = (int) p1bullet.getCenterY();
 			
 		}
 		if (p1shot.getX() < -50 || p1shot.getX() > 1350){ //shot goes off the side of screen
@@ -339,19 +339,19 @@ public class GamePanel extends JPanel {
 		p2bullet.setCenterY(p2shot.getY());
 		if (groundPoly.contains(p2shot.getX(), p2shot.getY())){ //when the shot hits the ground
 			turn = "p2 explode";
-			explodeX = plshot.getX();
-			explodeY = p1shot.getY();
+			explodeX = (int) p2bullet.getCenterX();
+			explodeY = (int) p2bullet.getCenterX();
 		}
 		if (greenTankRect.contains(p2shot.getX(), p2shot.getY())){ //check for hit against opponent
 			turn = "p2 explode";
-			explodeX = plshot.getX();
-			explodeY = p1shot.getY();
+			explodeX = (int) p2bullet.getCenterX();
+			explodeY = (int) p2bullet.getCenterX();
 			greenTank.takeDamage(20);
 		}
 		if (redTankRect.contains(p2shot.getX(), p2shot.getY())){ //check for hit against itself
 			turn = "p2 explode";
-			explodeX = plshot.getX();
-			explodeY = p1shot.getY();
+			explodeX = (int) p2bullet.getCenterX();
+			explodeY = (int) p2bullet.getCenterX();
 			redTank.takeDamage(20);
 		}
 		if (p2shot.getX() < -50 || p2shot.getX() > 1350){ //shot goes off the side of screen
