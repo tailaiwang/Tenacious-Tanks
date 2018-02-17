@@ -28,10 +28,11 @@ public class GamePanel extends JPanel {
 	Ellipse p2bullet = new Ellipse();
 
 	ImageIcon gameBack = new ImageIcon("Images/gameBack.jpg"); //images
-	Image green, green1, red, red1,explosionImage;
+	Image green, green1, red, red1, explosionImage;
 	Image titleText, enterText, instructionsText, backspaceText, titleBack, redTurn, greenTurn, redWins, greenWins, winBack, backspaceAgainText, escapeQuitText;
 	Integer explosionNum;
-	int explodeX,explodeY;
+	double frame = 0;
+	int explodeX, explodeY;
 	int greenIndex, redIndex = 0;
 	int greenX = 100; //starting X positions for tanks
 	int oldGreenX = greenX;
@@ -46,7 +47,7 @@ public class GamePanel extends JPanel {
 	Rectangle redTankRect = new Rectangle(greenX, greenY, 78, 30); //tank rectangles
 	
 	private boolean[] keys;
-	private Image[] greens, reds, explosion;
+	private Image[] greens, reds, explosions;
 	
 	Polygon groundPoly = new Polygon(); //map polygons
 	Polygon groundPoly2 = new Polygon();
@@ -104,12 +105,12 @@ public class GamePanel extends JPanel {
     	escapeQuitText = new ImageIcon("Images/escapeQuitText.png").getImage();
     	escapeQuitText = escapeQuitText.getScaledInstance(400, 50, Image.SCALE_SMOOTH);
     	///////////////////////////////////////////////
-    	explosion = new Image[14];
-    	for (int i = 0; i < 13; i++){
+    	explosions = new Image[14];
+    	for (int i = 0; i < 14; i++){
     		Integer explosionNum = i;
     		String imageName = "Images/explosion/explosion_";
-    		explosionImage = new ImageIcon(imageName+explosionNum.toString()).getImage();
-    		explosion[i] = explosionImage;
+    		explosionImage = new ImageIcon(imageName + explosionNum.toString() + ".png").getImage();
+    		explosions[i] = explosionImage;
     	}//end for
     	
     	///////////////////////////////////////////////
@@ -249,24 +250,18 @@ public class GamePanel extends JPanel {
     	p1shot.advance();
     	p1bullet.setCenterX(p1shot.getX());
 		p1bullet.setCenterY(p1shot.getY());
+		explodeX = p1shot.getX();
+		explodeY = p1shot.getY();
 		if (groundPoly.contains(p1shot.getX(), p1shot.getY())){ //when the shot hits the ground
 			turn = "p1 explode";
-			explodeX = (int) p1bullet.getCenterX();
-			explodeY = (int) p1bullet.getCenterY();
 		}
 		if (redTankRect.contains(p1shot.getX(), p1shot.getY())){ //check for hit against opponent
 			redTank.takeDamage(20);
-			turn = "p1 explode";
-			explodeX = (int) p1bullet.getCenterX();
-			explodeY = (int) p1bullet.getCenterY();
-			
+			turn = "p1 explode";	
 		}
 		if (greenTankRect.contains(p1shot.getX(), p1shot.getY())){ //check for hit against itself
 			turn = "p1 explode";
-			greenTank.takeDamage(20);
-			explodeX = (int) p1bullet.getCenterX();
-			explodeY = (int) p1bullet.getCenterY();
-			
+			greenTank.takeDamage(20);	
 		}
 		if (p1shot.getX() < -50 || p1shot.getX() > 1350){ //shot goes off the side of screen
 			turn = "p2 select";
@@ -337,47 +332,56 @@ public class GamePanel extends JPanel {
     	p2shot.advance();
     	p2bullet.setCenterX(p2shot.getX());
 		p2bullet.setCenterY(p2shot.getY());
+		explodeX = p2shot.getX();
+		explodeY = p2shot.getY();
 		if (groundPoly.contains(p2shot.getX(), p2shot.getY())){ //when the shot hits the ground
 			turn = "p2 explode";
-			explodeX = (int) p2bullet.getCenterX();
-			explodeY = (int) p2bullet.getCenterX();
 		}
 		if (greenTankRect.contains(p2shot.getX(), p2shot.getY())){ //check for hit against opponent
 			turn = "p2 explode";
-			explodeX = (int) p2bullet.getCenterX();
-			explodeY = (int) p2bullet.getCenterX();
 			greenTank.takeDamage(20);
 		}
 		if (redTankRect.contains(p2shot.getX(), p2shot.getY())){ //check for hit against itself
 			turn = "p2 explode";
-			explodeX = (int) p2bullet.getCenterX();
-			explodeY = (int) p2bullet.getCenterX();
 			redTank.takeDamage(20);
 		}
 		if (p2shot.getX() < -50 || p2shot.getX() > 1350){ //shot goes off the side of screen
 			turn = "p1 select";
 		}
     }
+    
     public void p1explode(){
-    	double frame = 0;
-    	while (true){
-    		frame += 0.1;
-    		if (frame == 14){
-    			break;
-    		}
+    	frame += 0.15;
+    	if (frame >= 13.0){
+			turn = "p2 select";
+			frame = 0.0;
+			if (greenTank.getHealth() == 0){ //only check for health after explosion anamation
+				screen = "win";
+				turn = "red win";
+			}
+			if (redTank.getHealth() == 0){
+				screen = "win";
+				turn = "green win";
+	    	}
     	}
-    	turn = "p2 select";
     }
+    
     public void p2explode(){
-    	double frame = 0;
-    	while (true){
-    		frame += 0.1;
-    		if (frame == 14){
-    		   break;
-    		}
+    	frame += 0.15;
+    	if (frame >= 13.0){
+			turn = "p1 select";
+			frame = 0.0;
+			if (greenTank.getHealth() == 0){  //only check for health after explosion anamation
+				screen = "win";
+				turn = "red win";
+			}
+			if (redTank.getHealth() == 0){
+				screen = "win";
+				turn = "green win";
+	    	}
     	}
-    	turn = "p1 select";
     }
+    
     public void win(){
     	if (keys[KeyEvent.VK_BACK_SPACE]){ //play again (reset all game variables)
     		redTank.resetHealth();
@@ -419,14 +423,11 @@ public class GamePanel extends JPanel {
     		if (turn == "p1 select"){
     			p1select();
     		}
-    		if (turn == "p1 explode"){
-    			p1explode();
-    		}
-    		if (turn == "p2 explode"){
-    			p2explode();
-    		}
     		if (turn == "p1 shoot"){
     			p1shoot();
+    		}
+    		if (turn == "p1 explode"){
+    			p1explode();
     		}
     		if (turn == "p2 select"){
     			p2select();
@@ -434,20 +435,15 @@ public class GamePanel extends JPanel {
     		if (turn == "p2 shoot"){
     			p2shoot();	
     		}
+    		if (turn == "p2 explode"){
+    			p2explode();
+    		}
 			if (!groundPoly.contains(greenX + 40, greenY + 30)){
 				greenY += 3;
 			}
 			if (!groundPoly.contains(redX + 40, redY + 30)){
 				redY += 3;
 			}
-			if (greenTank.getHealth() == 0){
-				screen = "win";
-				turn = "red win";
-			}
-			if (redTank.getHealth() == 0){
-				screen = "win";
-				turn = "green win";
-	    	}
     	}
 	    if (screen == "win"){
 	    	win();
@@ -488,26 +484,6 @@ public class GamePanel extends JPanel {
 		}
 		if (screen == "game"){
 			gameBack.paintIcon(this, g, -200,-400); //background
-			if (turn == "p1 select"){
-				g.drawImage(greenTurn, (screenX / 2) - (greenTurn.getWidth(null) / 2), 20, this);
-			}
-			if (turn == "p1 shoot"){
-				g.fillOval(p1shot.getX(), p1shot.getY(), 10, 10); //bullet
-				g.drawImage(greenTurn, (screenX / 2) - (greenTurn.getWidth(null) / 2), 20, this);
-			}
-			if (turn == "p2 select"){
-				g.drawImage(redTurn, (screenX/2) - (redTurn.getWidth(null) / 2), 20, this);
-			}
-			if (turn == "p2 shoot"){
-				g.fillOval(p2shot.getX(), p2shot.getY(), 10, 10); //bullet
-				g.drawImage(redTurn, (screenX/2) - (redTurn.getWidth(null) / 2), 20, this);
-			}
-			if (turn == "p1 explode"){
-				g.drawImage(explosions[(int) frame], explodeX - 48, explodeY - 48, this);
-			}
-			if (turn == "p2 explode"){
-				g.drawImage(explosions[(int) frame], explodeX - 48, explodeY - 48, this);
-			}
 			////////////////////////////////////////////////////// map
 			g.setColor(new Color(62, 216, 47));
 			g.fillPolygon(groundPoly);
@@ -529,16 +505,41 @@ public class GamePanel extends JPanel {
 			g2.drawLine(redX + 40, redY, redX + 40 + (int) (20*(Math.cos(Math.toRadians(redAngle)))), redY - (int) (20*(Math.sin(Math.toRadians(redAngle))))); //barrel from green tank
 			//g2.draw(redTankRect); //tank rectangles
 			//g2.draw(greenTankRect);
+			//////////////////////////////////////////////////////
+			if (turn == "p1 select"){
+				g.drawImage(greenTurn, (screenX / 2) - (greenTurn.getWidth(null) / 2), 20, this);
+			}
+			if (turn == "p1 shoot"){
+				g.setColor(new Color(0, 0, 0));
+				g.fillOval(p1shot.getX(), p1shot.getY(), 10, 10); //bullet
+				g.drawImage(greenTurn, (screenX / 2) - (greenTurn.getWidth(null) / 2), 20, this);
+			}
+			if (turn == "p1 explode"){
+				g.drawImage(explosions[(int) frame], explodeX - 48, explodeY - 90, this);
+				g.drawImage(greenTurn, (screenX / 2) - (greenTurn.getWidth(null) / 2), 20, this);
+			}
+			if (turn == "p2 select"){
+				g.drawImage(redTurn, (screenX/2) - (redTurn.getWidth(null) / 2), 20, this);	
+			}
+			if (turn == "p2 shoot"){
+				g.setColor(new Color(0, 0, 0));
+				g.fillOval(p2shot.getX(), p2shot.getY(), 10, 10); //bullet
+				g.drawImage(redTurn, (screenX/2) - (redTurn.getWidth(null) / 2), 20, this);
+			}
+			if (turn == "p2 explode"){
+				g.drawImage(explosions[(int) frame], explodeX - 48, explodeY - 90, this);
+				g.drawImage(redTurn, (screenX/2) - (redTurn.getWidth(null) / 2), 20, this);
+			}
 			/////////////////////////////////////////////////// tank information (heath, angle, power)
-			g.setFont(new Font("Arial Black", Font.PLAIN, 25));
+			g.setFont(new Font("Comic Sans MS", Font.PLAIN, 25));
 			g.setColor(Color.GREEN);
 			g.drawString("Health: " + greenTank.getHealth(), 5, 25);
 			g.drawString("Angle: " + greenAngle, 5, 55);
 			g.drawString("Power: " + greenPower, 5, 85);
 			g.setColor(Color.RED);
-			g.drawString("Health: " + redTank.getHealth(), 1130, 25);
-			g.drawString("Angle: " + redAngle, 1130, 55);
-			g.drawString("Power: " + redPower, 1130, 85);
+			g.drawString("Health: " + redTank.getHealth(), 1150, 25);
+			g.drawString("Angle: " + redAngle, 1150, 55);
+			g.drawString("Power: " + redPower, 1150, 85);
 		}
 		if (screen == "win"){
 			g.drawImage(winBack, 0, 0, this);
