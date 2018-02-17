@@ -106,7 +106,7 @@ public class GamePanel extends JPanel {
     	///////////////////////////////////////////////
     	explosion = new Image[14];
     	for (int i = 0; i < 13; i++){
-    		Integer exmplosionNum = i;
+    		Integer explosionNum = i;
     		String imageName = "Images/explosion/explosion_";
     		explosionImage = new ImageIcon(imageName+explosionNum.toString()).getImage();
     		explosion[i] = explosionImage;
@@ -359,9 +359,23 @@ public class GamePanel extends JPanel {
 		}
     }
     public void p1explode(){
+    	double frame = 0;
+    	while (true){
+    		frame += 0.1;
+    		if (frame == 14){
+    			break;
+    		}
+    	}
     	turn = "p2 select";
     }
     public void p2explode(){
+    	double frame = 0;
+    	while (true){
+    		frame += 0.1;
+    		if (frame == 14){
+    		   break;
+    		}
+    	}
     	turn = "p1 select";
     }
     public void win(){
@@ -487,6 +501,12 @@ public class GamePanel extends JPanel {
 			if (turn == "p2 shoot"){
 				g.fillOval(p2shot.getX(), p2shot.getY(), 10, 10); //bullet
 				g.drawImage(redTurn, (screenX/2) - (redTurn.getWidth(null) / 2), 20, this);
+			}
+			if (turn == "p1 explode"){
+				g.drawImage(explosions[(int) frame], explodeX - 48, explodeY - 48, this);
+			}
+			if (turn == "p2 explode"){
+				g.drawImage(explosions[(int) frame], explodeX - 48, explodeY - 48, this);
 			}
 			////////////////////////////////////////////////////// map
 			g.setColor(new Color(62, 216, 47));
