@@ -28,11 +28,9 @@ public class GamePanel extends JPanel {
 	Ellipse p2bullet = new Ellipse();
 
 	ImageIcon gameBack = new ImageIcon("Images/gameBack.jpg"); //images
-	Image green, green1, red, red1, explosionImage;
+	Image green, green1, red, red1;
 	Image titleText, enterText, instructionsText, backspaceText, titleBack, redTurn, greenTurn, redWins, greenWins, winBack, backspaceAgainText, escapeQuitText;
-	Integer explosionNum;
-	double frame = 0;
-	int explodeX, explodeY;
+	
 	int greenIndex, redIndex = 0;
 	int greenX = 100; //starting X positions for tanks
 	int oldGreenX = greenX;
@@ -47,7 +45,7 @@ public class GamePanel extends JPanel {
 	Rectangle redTankRect = new Rectangle(greenX, greenY, 78, 30); //tank rectangles
 	
 	private boolean[] keys;
-	private Image[] greens, reds, explosions;
+	private Image[] greens, reds;
 	
 	Polygon groundPoly = new Polygon(); //map polygons
 	Polygon groundPoly2 = new Polygon();
@@ -104,15 +102,6 @@ public class GamePanel extends JPanel {
     	backspaceAgainText = backspaceAgainText.getScaledInstance(500, 50, Image.SCALE_SMOOTH);
     	escapeQuitText = new ImageIcon("Images/escapeQuitText.png").getImage();
     	escapeQuitText = escapeQuitText.getScaledInstance(400, 50, Image.SCALE_SMOOTH);
-    	///////////////////////////////////////////////
-    	explosions = new Image[14];
-    	for (int i = 0; i < 14; i++){
-    		Integer explosionNum = i;
-    		String imageName = "Images/explosion/explosion_";
-    		explosionImage = new ImageIcon(imageName + explosionNum.toString() + ".png").getImage();
-    		explosions[i] = explosionImage;
-    	}//end for
-    	
     	///////////////////////////////////////////////
     	makeLand(); //generate the land
     	turnNum = randInt(1, 2);
@@ -250,18 +239,16 @@ public class GamePanel extends JPanel {
     	p1shot.advance();
     	p1bullet.setCenterX(p1shot.getX());
 		p1bullet.setCenterY(p1shot.getY());
-		explodeX = p1shot.getX();
-		explodeY = p1shot.getY();
 		if (groundPoly.contains(p1shot.getX(), p1shot.getY())){ //when the shot hits the ground
-			turn = "p1 explode";
+			turn = "p2 select";
 		}
 		if (redTankRect.contains(p1shot.getX(), p1shot.getY())){ //check for hit against opponent
 			redTank.takeDamage(20);
-			turn = "p1 explode";	
+			turn = "p2 select";
 		}
 		if (greenTankRect.contains(p1shot.getX(), p1shot.getY())){ //check for hit against itself
-			turn = "p1 explode";
-			greenTank.takeDamage(20);	
+			greenTank.takeDamage(20);
+			turn = "p2 select";
 		}
 		if (p1shot.getX() < -50 || p1shot.getX() > 1350){ //shot goes off the side of screen
 			turn = "p2 select";
@@ -332,60 +319,26 @@ public class GamePanel extends JPanel {
     	p2shot.advance();
     	p2bullet.setCenterX(p2shot.getX());
 		p2bullet.setCenterY(p2shot.getY());
-		explodeX = p2shot.getX();
-		explodeY = p2shot.getY();
 		if (groundPoly.contains(p2shot.getX(), p2shot.getY())){ //when the shot hits the ground
-			turn = "p2 explode";
+			turn = "p1 select";
 		}
 		if (greenTankRect.contains(p2shot.getX(), p2shot.getY())){ //check for hit against opponent
-			turn = "p2 explode";
 			greenTank.takeDamage(20);
+			turn = "p1 select";
 		}
 		if (redTankRect.contains(p2shot.getX(), p2shot.getY())){ //check for hit against itself
-			turn = "p2 explode";
 			redTank.takeDamage(20);
+			turn = "p1 select";
 		}
 		if (p2shot.getX() < -50 || p2shot.getX() > 1350){ //shot goes off the side of screen
 			turn = "p1 select";
 		}
     }
     
-    public void p1explode(){
-    	frame += 0.15;
-    	if (frame >= 13.0){
-			turn = "p2 select";
-			frame = 0.0;
-			if (greenTank.getHealth() == 0){ //only check for health after explosion anamation
-				screen = "win";
-				turn = "red win";
-			}
-			if (redTank.getHealth() == 0){
-				screen = "win";
-				turn = "green win";
-	    	}
-    	}
-    }
-    
-    public void p2explode(){
-    	frame += 0.15;
-    	if (frame >= 13.0){
-			turn = "p1 select";
-			frame = 0.0;
-			if (greenTank.getHealth() == 0){  //only check for health after explosion anamation
-				screen = "win";
-				turn = "red win";
-			}
-			if (redTank.getHealth() == 0){
-				screen = "win";
-				turn = "green win";
-	    	}
-    	}
-    }
-    
     public void win(){
     	if (keys[KeyEvent.VK_BACK_SPACE]){ //play again (reset all game variables)
     		redTank.resetHealth();
-    		redX = 1200; 
+    		redX = 1200;
     		redY = 50;
     		redPower = 50;
     		redAngle = 135;
@@ -426,17 +379,11 @@ public class GamePanel extends JPanel {
     		if (turn == "p1 shoot"){
     			p1shoot();
     		}
-    		if (turn == "p1 explode"){
-    			p1explode();
-    		}
     		if (turn == "p2 select"){
     			p2select();
     		}
     		if (turn == "p2 shoot"){
     			p2shoot();	
-    		}
-    		if (turn == "p2 explode"){
-    			p2explode();
     		}
 			if (!groundPoly.contains(greenX + 40, greenY + 30)){
 				greenY += 3;
@@ -444,6 +391,14 @@ public class GamePanel extends JPanel {
 			if (!groundPoly.contains(redX + 40, redY + 30)){
 				redY += 3;
 			}
+			if (greenTank.getHealth() == 0){
+				screen = "win";
+				turn = "red win";
+			}
+			if (redTank.getHealth() == 0){
+				screen = "win";
+				turn = "green win";
+	    	}
     	}
 	    if (screen == "win"){
 	    	win();
@@ -469,7 +424,7 @@ public class GamePanel extends JPanel {
 		}
 		if (screen == "instructions"){
 			gameBack.paintIcon(this, g, -200,-400);
-			g.setColor(new Color(62, 216, 47));
+			/*g.setColor(new Color(62, 216, 47));
 			g.fillPolygon(groundPoly);
 			g.setColor(new Color(50, 181, 38));
 			g.fillPolygon(groundPoly2);
@@ -479,11 +434,39 @@ public class GamePanel extends JPanel {
 			g.fillPolygon(groundPoly4);
 			g.setColor(new Color(8, 66, 4));
 			g.fillPolygon(groundPoly5);
-			g.drawImage(instructionsText, (screenX / 2) - (instructionsText.getWidth(null) / 2), 30, this);
+			*/
+			g.drawImage(instructionsText, (screenX / 2) - (instructionsText.getWidth(null) / 2), 10, this);
 			g.drawImage(backspaceText, (screenX / 2) - (backspaceText.getWidth(null) / 2), 500, this);
+			g.setFont(new Font("Comic Sans MS", Font.PLAIN, 25));
+			g.setColor(Color.BLUE);
+			g.drawString("Welcome to Tenacious Tanks, a 2-Player battle to the Death!",screenX/5 + 20,160);
+			g.setColor(Color.GREEN);
+			g.drawString("Green",400,200);
+			g.drawString("A & D to move",400,240);
+			g.drawString("W & S to angle",400, 260);
+			g.drawString("Q & E to power",400,280);
+			g.setColor(Color.RED);
+			g.drawString("Red", 700,200);
+			g.drawString("LEFT & RIGHT to move",700,240);
+			g.drawString("UP & DOWN to angle", 700, 260);
+			g.drawString(". & ? to power", 700, 280);
 		}
 		if (screen == "game"){
 			gameBack.paintIcon(this, g, -200,-400); //background
+			if (turn == "p1 select"){
+				g.drawImage(greenTurn, (screenX / 2) - (greenTurn.getWidth(null) / 2), 20, this);
+			}
+			if (turn == "p1 shoot"){
+				g.fillOval(p1shot.getX(), p1shot.getY(), 10, 10); //bullet
+				g.drawImage(greenTurn, (screenX / 2) - (greenTurn.getWidth(null) / 2), 20, this);
+			}
+			if (turn == "p2 select"){
+				g.drawImage(redTurn, (screenX/2) - (redTurn.getWidth(null) / 2), 20, this);
+			}
+			if (turn == "p2 shoot"){
+				g.fillOval(p2shot.getX(), p2shot.getY(), 10, 10); //bullet
+				g.drawImage(redTurn, (screenX/2) - (redTurn.getWidth(null) / 2), 20, this);
+			}
 			////////////////////////////////////////////////////// map
 			g.setColor(new Color(62, 216, 47));
 			g.fillPolygon(groundPoly);
@@ -505,31 +488,6 @@ public class GamePanel extends JPanel {
 			g2.drawLine(redX + 40, redY, redX + 40 + (int) (20*(Math.cos(Math.toRadians(redAngle)))), redY - (int) (20*(Math.sin(Math.toRadians(redAngle))))); //barrel from green tank
 			//g2.draw(redTankRect); //tank rectangles
 			//g2.draw(greenTankRect);
-			//////////////////////////////////////////////////////
-			if (turn == "p1 select"){
-				g.drawImage(greenTurn, (screenX / 2) - (greenTurn.getWidth(null) / 2), 20, this);
-			}
-			if (turn == "p1 shoot"){
-				g.setColor(new Color(0, 0, 0));
-				g.fillOval(p1shot.getX(), p1shot.getY(), 10, 10); //bullet
-				g.drawImage(greenTurn, (screenX / 2) - (greenTurn.getWidth(null) / 2), 20, this);
-			}
-			if (turn == "p1 explode"){
-				g.drawImage(explosions[(int) frame], explodeX - 48, explodeY - 90, this);
-				g.drawImage(greenTurn, (screenX / 2) - (greenTurn.getWidth(null) / 2), 20, this);
-			}
-			if (turn == "p2 select"){
-				g.drawImage(redTurn, (screenX/2) - (redTurn.getWidth(null) / 2), 20, this);	
-			}
-			if (turn == "p2 shoot"){
-				g.setColor(new Color(0, 0, 0));
-				g.fillOval(p2shot.getX(), p2shot.getY(), 10, 10); //bullet
-				g.drawImage(redTurn, (screenX/2) - (redTurn.getWidth(null) / 2), 20, this);
-			}
-			if (turn == "p2 explode"){
-				g.drawImage(explosions[(int) frame], explodeX - 48, explodeY - 90, this);
-				g.drawImage(redTurn, (screenX/2) - (redTurn.getWidth(null) / 2), 20, this);
-			}
 			/////////////////////////////////////////////////// tank information (heath, angle, power)
 			g.setFont(new Font("Comic Sans MS", Font.PLAIN, 25));
 			g.setColor(Color.GREEN);
