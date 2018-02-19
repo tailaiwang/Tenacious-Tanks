@@ -1,7 +1,7 @@
 # ICS4U Simple Game Project: Tenacious-Tanks
 ###### By Cameron Beneteau and Tailai Wang
-
-A 2 Player Tank game made on Java. 
+###### January 22nd, 2018 to February 20th, 2018
+A 2 Player Tank game made on Java and Python 3.3. Graphics created using PISKEL and FlamingText. 
 ## Edit Notes Below
 January 22nd, 2018: Project begins  
 January 23rd, 2018: Cameron starts developping Bullet Class and Testing  
@@ -13,7 +13,7 @@ January 27th, 2018: Cameron debugged map generation and integrated with Tenaciou
                     Rescaled tank images which can now sit on the terrain while moving an at rest.
                     Began tank object class (deals with health, damage, etc).  
 February 5th, 2018: Cameron finihsed angle and movement inputs from users.  
-February 6th, 2018: Cameron created turn process. Each player has a selection phase ans shoot phase.
+February 6th, 2018: Cameron created turn process. Each player has a selection phase and shoot phase.
                     Tailai created and implemented turn images for each user.  
 February 7th, 2018: Cameron finished movement restriction for tanks. (Can only move up to 50 pixels left or right during selection phase)  
 February 8th, 2018: Cameron started bullet class.  
