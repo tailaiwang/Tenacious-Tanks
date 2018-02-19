@@ -21,19 +21,19 @@ public class Bullet {
     	angle = ang;
     	vx = 0.2 * power * (Math.cos(Math.toRadians(angle))); //scaled x and y components down
     	vy = -0.2 * power * (Math.sin(Math.toRadians(angle)));
-    }
+    }//end constructor
     
     public void advance(){ //bullet moving each frame
-    	x += vx;
+    	x += vx; //ading velocity based on power
     	vy += 0.15; //gravity acting on bullet
     	y += vy;
-    }
-    
+    }//end advance
+    //getters and setters
     public int getX(){ //used to check collision
     	return (int) x;
-    }
+    }//end getX
     
     public int getY(){ //used to check collision
     	return (int) y;
-    }
-}
+    }//end getY
+}//end Bullet

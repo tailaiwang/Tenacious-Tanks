@@ -9,10 +9,11 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import java.awt.image.*;
-import javafx.scene.shape.Ellipse;
-import javax.sound.sampled.*;
+import java.awt.image.*; //awt and swing were painful
+import javafx.scene.shape.Ellipse; //used for map design and stuff
+import javax.sound.sampled.*; //did we even use sound...? oh well who cares
 
+//THIS is the main file, with the public static void main
 public class TenaciousTanks extends JFrame implements ActionListener, KeyListener {
 	Timer myTimer;
 	GamePanel game;
@@ -30,26 +31,26 @@ public class TenaciousTanks extends JFrame implements ActionListener, KeyListene
     	setResizable(false);
     	setVisible(true);
     	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    }
+    }//end constructor
     
     public void actionPerformed(ActionEvent e) {
     	if(game != null){
     		game.refresh();
     		game.repaint();
-    	}
-    }
+    	}//end if
+    }//end actionPerformed
     
-    public void keyTyped(KeyEvent e) {}
+    public void keyTyped(KeyEvent e) {}//end keyTyped
     
     public void keyPressed(KeyEvent e) {
     	game.setKey(e.getKeyCode(), true);
-    }
+    }//end keyPressed
     
     public void keyReleased(KeyEvent e) {
     	game.setKey(e.getKeyCode(), false);
-    }
+    }//end keyReleased 
     
-    public static void main(String[]args) {
+    public static void main(String[]args) { //what runs the entire program
     	new TenaciousTanks();
-    }   
-}
+    }//end main
+}//end TenaciousTanks
